@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<script src="https://capwv.github.io/SAMS-MIS/sams-bg.js" defer></script>
+<html lang="ar" dir="rtl">
+<head>
+  <script>onload=()=>document.querySelector('footer').insertAdjacentHTML('beforeend','<p style="text-align:center;margin:16px" dir="ltr"><a style="color:#7dd3fc" href="https://capwv.github.io/SAMS-Compass/platforms.html">Platforms &amp; Tools</a></p>');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ML From Zero | تعلم الآلة من الصفر خطوة بخطوة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f1420;
+  --panel: #171e2e;
+  --panel2: #1e2740;
+  --border: #2a3552;
+  --text: #e8ecf5;
+  --muted: #9aa7c2;
+  --accent: #4da3ff;
+  --accent2: #7c5cff;
+  --green: #2ecc71;
+  --red: #ff6b6b;
+  --amber: #ffc048;
+  --code-bg: #0a0e18;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.9;
+}
+
+code, pre, .mono {
+  font-family: 'JetBrains Mono', monospace;
+  direction: ltr;
+  text-align: left;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(15,20,32,.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner {
+  max-width: 1200px; margin: 0 auto; padding: 12px 20px;
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+}
+.logo { font-size: 1.3rem; font-weight: 900; }
+.logo span { color: var(--accent); }
+.progress-wrap { flex: 1; min-width: 180px; max-width: 420px; margin-inline-start: auto; }
+.progress-label { font-size: .8rem; color: var(--muted); margin-bottom: 4px; }
+.progress-label span { color: var(--accent); font-weight: 700; }
+.progress-bar { height: 8px; background: var(--panel2); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 99px; transition: width .5s ease; }
+
+/* ===== Layout ===== */
+.layout { max-width: 1200px; margin: 0 auto; display: flex; gap: 24px; padding: 24px 20px 80px; align-items: flex-start; }
+
+.sidebar {
+  width: 260px; flex-shrink: 0;
+  position: sticky; top: 76px;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px; max-height: calc(100vh - 100px); overflow-y: auto;
+}
+#nav { display: flex; flex-direction: column; gap: 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px; cursor: pointer;
+  color: var(--muted); font-weight: 600; font-size: .92rem;
+  border: 1px solid transparent; transition: .15s;
+}
+.nav-item:hover { background: var(--panel2); color: var(--text); }
+.nav-item.active { background: var(--panel2); color: var(--text); border-color: var(--accent); }
+.nav-item .check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: .7rem; flex-shrink: 0; }
+.nav-item.done .check { background: var(--green); border-color: var(--green); color: #06270f; }
+.nav-item .num { color: var(--accent); font-size: .78rem; min-width: 20px; }
+
+.reset-btn {
+  margin-top: 14px; width: 100%; padding: 9px;
+  background: transparent; border: 1px solid var(--border); border-radius: 10px;
+  color: var(--muted); font-family: inherit; font-size: .85rem; cursor: pointer;
+}
+.reset-btn:hover { color: var(--red); border-color: var(--red); }
+
+.content { flex: 1; min-width: 0; }
+
+/* ===== Hero ===== */
+.hero { background: linear-gradient(135deg, var(--panel), var(--panel2)); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.hero h2 { margin-bottom: 10px; font-size: 1.6rem; }
+.hero p { color: var(--muted); margin-bottom: 10px; }
+.hero-hint { color: var(--accent) !important; font-weight: 700; }
+
+/* ===== Lesson ===== */
+.lesson { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+.lesson h2.lesson-title { font-size: 1.5rem; margin-bottom: 6px; }
+.lesson .lesson-sub { color: var(--muted); margin-bottom: 22px; font-size: .95rem; }
+.lesson h3 { margin: 26px 0 10px; color: var(--accent); font-size: 1.15rem; }
+.lesson p { margin-bottom: 12px; color: #d4dbea; }
+.lesson ul, .lesson ol { margin: 0 22px 14px; color: #d4dbea; }
+.lesson li { margin-bottom: 6px; }
+
+.kw { color: var(--amber); font-weight: 600; font-family: 'JetBrains Mono', monospace; direction: ltr; unicode-bidi: embed; background: var(--code-bg); padding: 1px 7px; border-radius: 6px; font-size: .85em; }
+
+pre {
+  background: var(--code-bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px; margin: 12px 0 18px;
+  overflow-x: auto; font-size: .9rem; line-height: 1.7;
+}
+pre .c { color: #5b6b8c; }          /* comment */
+pre .k { color: var(--accent); }    /* keyword */
+pre .s { color: var(--green); }     /* string */
+pre .n { color: var(--amber); }     /* number */
+
+.note {
+  background: rgba(77,163,255,.08); border: 1px solid rgba(77,163,255,.35);
+  border-radius: 12px; padding: 14px 16px; margin: 14px 0; font-size: .93rem;
+}
+.note.warn { background: rgba(255,192,72,.07); border-color: rgba(255,192,72,.4); }
+.note b { color: var(--accent); }
+.note.warn b { color: var(--amber); }
+
+table.demo { border-collapse: collapse; margin: 12px 0 18px; font-size: .88rem; direction: ltr; }
+table.demo th, table.demo td { border: 1px solid var(--border); padding: 6px 14px; }
+table.demo th { background: var(--panel2); color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+table.demo td { font-family: 'JetBrains Mono', monospace; color: #c7d1e6; }
+
+/* ===== Quiz ===== */
+.quiz-box, .exercise-box {
+  margin-top: 30px; border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px; background: var(--panel2);
+}
+.quiz-box > h3, .exercise-box > h3 { margin-top: 0 !important; }
+.quiz-q { margin: 18px 0; padding: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
+.quiz-q .q-text { font-weight: 700; margin-bottom: 12px; }
+.quiz-q pre { margin: 10px 0; }
+.opt {
+  display: block; width: 100%; text-align: right; margin-bottom: 8px;
+  padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--panel2); color: var(--text); font-family: inherit; font-size: .92rem;
+  cursor: pointer; transition: .15s;
+}
+.opt .mono { font-size: .88rem; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; opacity: .85; }
+.opt.correct { border-color: var(--green); background: rgba(46,204,113,.12); }
+.opt.wrong { border-color: var(--red); background: rgba(255,107,107,.12); }
+.feedback { margin-top: 8px; font-size: .88rem; border-radius: 8px; padding: 8px 12px; display: none; }
+.feedback.ok { display: block; background: rgba(46,204,113,.1); color: #8deab5; }
+.feedback.no { display: block; background: rgba(255,107,107,.1); color: #ffabab; }
+
+.quiz-result {
+  margin-top: 18px; padding: 14px; border-radius: 12px; text-align: center;
+  font-weight: 700; display: none;
+}
+.quiz-result.show { display: block; background: rgba(46,204,113,.1); border: 1px solid var(--green); color: #8deab5; }
+
+/* ===== Exercises ===== */
+.exercise { margin: 16px 0; padding: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
+.exercise .task { font-weight: 700; margin-bottom: 10px; }
+.solution-toggle {
+  padding: 8px 16px; border-radius: 8px; border: 1px solid var(--accent);
+  background: transparent; color: var(--accent); font-family: inherit;
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+}
+.solution-toggle:hover { background: rgba(77,163,255,.1); }
+.solution { display: none; margin-top: 12px; }
+.solution.open { display: block; }
+.solution pre { margin-bottom: 6px; }
+.solution .why { color: var(--muted); font-size: .88rem; }
+
+/* ===== Lesson nav buttons ===== */
+.lesson-nav { display: flex; justify-content: space-between; margin-top: 34px; gap: 12px; }
+.lesson-nav button {
+  padding: 11px 22px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--panel2); color: var(--text); font-family: inherit;
+  font-weight: 700; cursor: pointer; font-size: .92rem;
+}
+.lesson-nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.lesson-nav button:disabled { opacity: .4; cursor: default; }
+.lesson-nav .next-btn { background: linear-gradient(90deg, var(--accent), var(--accent2)); border: none; color: #fff; }
+.lesson-nav .next-btn:hover:not(:disabled) { color: #fff; filter: brightness(1.1); }
+
+.complete-badge {
+  display: none; margin-top: 24px; text-align: center; padding: 16px;
+  background: rgba(46,204,113,.1); border: 1px solid var(--green); border-radius: 12px;
+  font-weight: 700; color: #8deab5; font-size: 1.05rem;
+}
+.complete-badge.show { display: block; }
+
+/* ===== Mobile ===== */
+.menu-toggle {
+  display: none; position: fixed; bottom: 18px; inset-inline-start: 18px; z-index: 60;
+  padding: 12px 20px; border-radius: 99px; border: none;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: #fff; font-family: inherit; font-weight: 700; cursor: pointer;
+  box-shadow: 0 6px 24px rgba(77,163,255,.4);
+}
+@media (max-width: 900px) {
+  .layout { flex-direction: column; }
+  .sidebar {
+    position: fixed; inset-inline-start: 0; top: 0; bottom: 0; z-index: 55;
+    width: 290px; border-radius: 0; transform: translateX(100%);
+    transition: transform .25s ease; max-height: none;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .menu-toggle { display: block; }
+}
+:root{--bg:#04060d;--panel:#0a1120;--panel2:#0e1730;--border:#203454;--accent:#60a5fa;--accent2:#38bdf8}
+body{background-image:radial-gradient(ellipse at 50% 0,rgba(59,130,246,.15),transparent 65%)}
+.bg-shapes{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:-1}.bg-shapes i{position:absolute;width:280px;height:280px;border:1px solid #3b82f62b;transform:rotate(30deg);top:20%;left:-100px}.bg-shapes i:nth-child(2){left:auto;right:-120px;top:55%;border-radius:50%;width:400px;height:400px}.bg-shapes i:nth-child(3){top:65%;left:40%;width:120px;height:120px;border-color:#38bdf82b}
+.brand-mark{width:65px;height:auto}.hero{text-align:center;padding:40px 28px}.hero-logo{width:150px;filter:drop-shadow(0 0 20px #3b82f64d)}.hero-pill{font-size:11px;letter-spacing:1px;color:var(--accent);margin:15px 0}.hero h2{font-size:2rem}.stats{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin:30px 0}.stats span{font-size:12px;color:var(--muted)}.stats b{display:block;font-size:24px;color:white;direction:ltr}.cta{border:0;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:white;padding:13px 30px;border-radius:12px;font:700 16px Cairo,sans-serif;cursor:pointer;margin:10px 0 20px;box-shadow:0 8px 30px #3b82f62b}.links-bar{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;padding:8px 12px;border-top:1px solid #20345466}.links-bar a,.links-bar button{color:var(--muted);font:600 12px Cairo,sans-serif;text-decoration:none;background:none;border:0;cursor:pointer}.links-bar a:hover,.links-bar button:hover{color:var(--accent)}.small{font-size:12px!important;color:var(--muted)!important}.nav-item{font-family:inherit;background:none;text-align:right;line-height:1.7}.sidebar{top:120px;max-height:calc(100vh - 145px)}
+textarea{width:100%;background:#040913;color:#d6e6ff;border:1px solid var(--border);border-radius:10px;padding:14px;font:14px/1.7 'JetBrains Mono',monospace;margin:10px 0;resize:vertical;text-align:left}.table-scroll{overflow-x:auto;max-width:100%}table.demo{display:block;overflow-x:auto;max-width:100%}pre .c{color:#91a6c8}.opt .mono{display:inline-block;direction:ltr;unicode-bidi:isolate}button:focus-visible,a:focus-visible,textarea:focus-visible{outline:2px solid #38bdf8;outline-offset:3px}.solution-toggle{margin:8px}.complete-badge{font-size:.95rem}
+@media(max-width:900px){.sidebar{top:0;max-height:none}.hero{padding:30px 18px}.lesson{padding:22px 16px}.layout{padding:18px 12px 85px}.hero h2{font-size:1.5rem}.topbar-inner{gap:10px}.progress-wrap{min-width:120px}.links-bar{gap:14px}.logo{font-size:1rem}.brand-mark{width:48px}.lesson-nav button{font-size:12px;padding:10px}.quiz-box,.exercise-box{padding:12px}}
+@media(prefers-reduced-motion:no-preference){.bg-shapes i{animation:float 12s ease-in-out infinite alternate}@keyframes float{to{transform:translateY(-25px) rotate(45deg)}}}
+
+footer a{color:var(--accent)}
+.content,.lesson{max-width:100%}.content{width:100%}pre{max-width:100%}.lesson p,.lesson li,.opt{overflow-wrap:anywhere}.lesson table{max-width:100%}
+
+/* SAMS-MIS visual language: ink-black surfaces, blue glass and quiet geometry. */
+:root{--bg:#06070a;--panel:#0a0c12;--panel2:#101522;--border:rgba(255,255,255,.10);--text:#f5f7fa;--muted:#98a1b3;--accent:#3b82f6;--accent2:#7aa7ff;--code-bg:#070a11}
+body{position:relative;isolation:isolate;background-image:radial-gradient(820px 420px at 50% -12%,rgba(59,130,246,.20),transparent 68%),radial-gradient(560px 340px at 88% 8%,rgba(139,92,246,.10),transparent 70%),radial-gradient(560px 340px at 8% 22%,rgba(56,189,248,.08),transparent 70%);background-attachment:fixed}
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(760px 360px at 50% -10%,rgba(59,130,246,.11),transparent 70%)}
+.bg-shapes{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.topbar,.layout,.menu-toggle{position:relative;z-index:1}
+.bg-shapes i{position:absolute;top:18%;left:-100px;width:280px;height:280px;border:1px solid rgba(59,130,246,.17);transform:rotate(30deg);animation:shapeFloat 14s ease-in-out infinite alternate}
+.bg-shapes i:nth-child(2){top:55%;left:auto;right:-130px;width:390px;height:390px;border-radius:50%;border-color:rgba(122,167,255,.15);animation-delay:-5s}
+.bg-shapes i:nth-child(3){top:72%;left:42%;width:110px;height:110px;border-color:rgba(56,189,248,.18);animation-delay:-9s}
+@keyframes shapeFloat{to{transform:translateY(-22px) rotate(44deg)}}
+.topbar{background:rgba(6,7,10,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar-inner{max-width:1152px;padding:10px 16px;gap:16px}
+.logo{font-size:1.08rem;letter-spacing:.02em}.brand-mark{width:48px;filter:drop-shadow(0 8px 24px rgba(59,130,246,.2))}
+.progress-wrap{max-width:360px}.progress-bar{background:rgba(255,255,255,.08)}.progress-fill{background:linear-gradient(90deg,#3b82f6,#38bdf8);box-shadow:0 0 16px rgba(59,130,246,.35)}
+.links-bar{gap:10px;padding:8px 12px;border-top:1px solid rgba(255,255,255,.06);background:rgba(6,7,10,.28)}
+.links-bar a,.links-bar button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 12px;border:1px solid transparent;border-radius:11px;color:#98a1b3;font:700 12px Cairo,sans-serif;text-decoration:none;background:transparent;transition:background .2s,color .2s,border-color .2s}
+.links-bar a:hover,.links-bar button:hover{color:#fff;background:rgba(59,130,246,.12);border-color:rgba(122,167,255,.24)}
+.links-bar .community-link{color:#e9f1ff;background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.14);white-space:nowrap}
+.links-bar .community-link:hover{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.hero{position:relative;overflow:hidden;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.10);border-radius:20px;box-shadow:0 22px 60px -38px rgba(59,130,246,.4)}
+.hero:before{content:"";position:absolute;top:0;right:10%;left:10%;height:2px;background:linear-gradient(to left,transparent,#7aa7ff,transparent);opacity:.75}
+.hero-logo{filter:drop-shadow(0 18px 44px rgba(59,130,246,.28))}
+.hero-pill{display:inline-block;padding:5px 13px;border-radius:999px;background:rgba(59,130,246,.10);border:1px solid rgba(122,167,255,.32);color:#9dc0ff;font-weight:800}
+.hero h2{color:#f5f7fa;font-weight:900}.hero p{color:#b8c0cf}.hero-hint{color:#9dc0ff!important}
+.lesson,.sidebar,.quiz-box,.exercise-box,.quiz-q,.exercise{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border-color:rgba(255,255,255,.10);border-radius:18px;box-shadow:0 18px 45px -38px rgba(59,130,246,.32)}
+.lesson h3{color:#9dc0ff}.nav-item.active{background:rgba(59,130,246,.12);border-color:rgba(122,167,255,.45);color:#f5f7fa}
+.nav-item:hover{background:rgba(255,255,255,.06)}.nav-item.done .check{background:#3ddc84;border-color:#3ddc84}
+pre,textarea{border-color:rgba(255,255,255,.12);background:#070a11}pre .k{color:#7aa7ff}
+.note{background:rgba(59,130,246,.08);border-color:rgba(122,167,255,.25)}.note b{color:#9dc0ff}
+.cta{background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:12px;box-shadow:0 8px 30px rgba(59,130,246,.2)}
+footer{position:relative;border-top:1px solid rgba(255,255,255,.08);padding-top:24px!important}
+
+/* Ahmed's contact footer */
+.contact-footer{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:28px;padding:24px 16px 8px;border-top:1px solid rgba(255,255,255,.10);text-align:center;color:var(--muted)}
+.contact-footer .contact-name{color:var(--text);font-size:1.1rem;font-weight:800;letter-spacing:.01em}
+.contact-footer .contact-links{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px}
+.contact-footer .contact-links a{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid rgba(122,167,255,.18);border-radius:999px;background:rgba(59,130,246,.07);color:#a8c4ff;text-decoration:none;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.contact-footer .contact-links a:hover{background:rgba(59,130,246,.16);border-color:rgba(122,167,255,.45);transform:translateY(-1px)}
+.contact-footer .contact-note{font-size:.78rem;color:var(--muted)}
+@media(max-width:480px){.contact-footer{padding-inline:10px}.contact-footer .contact-links{gap:7px}.contact-footer .contact-links a{padding:7px 10px;font-size:.88rem}}
+
+@media(max-width:430px){.hero-pill{font-size:9px;letter-spacing:.3px;padding:4px 8px;white-space:nowrap}.links-bar{gap:4px;padding-inline:6px}.links-bar a,.links-bar button{padding:0 8px;font-size:11px}.links-bar .community-link span{display:none}.topbar-inner{padding-inline:12px}.brand-mark{width:40px}}
+@media(prefers-reduced-motion:reduce){.bg-shapes i{animation:none}}
+
+
+.fx-grid{border-collapse:collapse;direction:ltr;font-family:'JetBrains Mono',monospace;font-size:.78rem;margin:12px 0;display:block;overflow-x:auto;max-width:100%}
+.fx-grid th{background:var(--panel2);color:var(--accent);border:1px solid var(--border);padding:3px 8px}
+.fx-grid td{border:1px solid var(--border);padding:3px 8px;color:#c7d1e6;white-space:nowrap}
+.fx-grid .fx-gap{border:none!important;background:transparent}
+.fx-line{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:8px 0;background:var(--panel);direction:ltr;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.88rem;overflow-wrap:anywhere}
+.fx-line .fx-f{color:var(--muted)}
+.fx-line .fx-r{font-weight:700;margin-top:4px}
+.fx-line .fx-ok{color:#3ddc84}
+.fx-line .fx-err{color:var(--red)}
+.fx-example{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:.8rem;cursor:pointer;margin:8px 4px 0}
+#fx-output{margin-top:14px}
+#py-output pre{white-space:pre-wrap;background:#070a11;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px;margin:12px 0;direction:ltr;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.88rem;line-height:1.7;color:#d6e6ff;max-height:420px;overflow:auto}#py-output img{max-width:100%;border-radius:12px;margin:10px 0;background:#fff;display:block}
+.dx-sel{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}.dx-sel label{display:flex;flex-direction:column;font-size:.85rem;color:var(--muted);gap:4px}
+.dx-sel select{background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:inherit}
+.dx-chs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.dx-ch{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-family:inherit;cursor:pointer;font-size:.85rem}
+.dx-ch.active{border-color:var(--accent);color:var(--accent)}.dx-ch.done{border-color:var(--green);color:var(--green)}
+.dx-tname{font-weight:700;color:var(--accent);margin-top:10px}
+.dx-verdict{margin-top:6px;font-family:'Cairo',sans-serif;direction:rtl;text-align:right;font-size:.9rem}.dx-verdict.ok{color:#3ddc84}.dx-verdict.no{color:var(--red)}
+#dx-sol{white-space:pre-wrap}
+.ml-canvas{width:100%;height:320px;background:#070a11;border:1px solid rgba(255,255,255,.12);border-radius:14px;touch-action:none;cursor:crosshair;margin:10px 0}
+@media(max-width:900px){.ml-canvas{height:280px}}
+</style>
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+<div class="bg-shapes" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <img class="brand-mark" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAABlCAMAAADTcTmKAAADAFBMVEVHcEz///////////////////7////////7/f///v8NAKH///////////8eU5n+/v9EZ8v7/Pv////+//8xrP+AtNp7nZ9Y/2D////9/P3////////8/f7//////////////////////v////////////////////////////////8TbP8hT3MTcv7///////////////////////9ctYuh8U3///////////////////8TX/L///8Ta/7///////////////8TV+UbW7UVQKP///////////////8UeP8TXen///8sW57///////////////////////8TQ62Lv9L///8nYaH///////////8SWO7////////29vseZ7v///////8TZ/4TbP0TZfwTXrb///8UZusTUL4TY+L///8TYPX///8TUNESZP4TVMr///////////9dyVb4+voTYO3///8TUdcWYb////8TQKUTWfwSYv4STKkTV9gTVdsUR6ETUrMSVtb///8UUK4TU8wScv/IiboTX98UbPkTTbMSXvkSV/oTVvIUfMUTUOwtpdMSW8kTZfizwFIVVq0UTcUVZNcTRrESRLYWVbITV9MTW90TaPUSXMQSn8kTVsTb0jkSW/YTTL4aWL0UULMTRqwRV8ITS8ETS7gSRb4TYdkTUscTT+ISTN8SQqoSTbEUV6YTUM8TUrsQQswUX/oTVcETUdMTUtQTUMoTWtYUaLIYYbkSQccRSL8Sa9USVckSWd4QWO0TStkTUMkUVK8TVdgTWbwTRb8SZPMbZbUgRZ4TTMsTYugVx+EUZuYTU8M3jNMVUqgRR7UTQK8TT78TUeEUgLoSWdESUr8SZ9oSVLcUduAjT6gTWa93xFoSYMwYXsUSXcISa88TWs0TPbITVtdDabg0a78SRc4sYswTX+AUYegTZN4TZcoTbuFhgb41YbETQ6kSgumIoMZTe8KJqt4TTLMaW7CIqMeCms3U2OP///8TVuEUWtYSUdkVXMoUZ9iJaHwdAAAA+nRSTlMA/Pn6/gT9AQMCAfv39QIFBAfyBgIFBgHbDTOJHOwV4BhbCMlgZ3sj1/Ov+QT776ZOgOXiBAKru6BWt/1j8RI7HxH5Fx6FR6Oy/f5KCULB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" alt="Infinity University Activity"><h1 class="logo">Machine Learning <span>من الصفر</span></h1>
+    <div class="progress-wrap">
+      <div class="progress-label"><span id="progress-text">0%</span> من الرحلة</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+  </div>
+<nav class="links-bar" aria-label="روابط الموقع"><a class="community-link" href="https://capwv.github.io/SAMS-Compass/platforms.html" aria-label="رجوع للمنصة الرئيسية">🏠 <span>رجوع للمنصة الرئيسية</span></a><button id="home-link">الرئيسية</button><button id="lab-link">معمل ML</button><a class="community-link" href="https://infinity-team-1-iua.github.io/IUA-SAMS/" target="_blank" rel="noopener" aria-label="Our Community">👥 <span>Our Community</span> ↗</a></nav></header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav id="nav"></nav>
+    <button class="reset-btn" id="reset-btn" title="مسح كل التقدم المحفوظ">🗑️ ابدأ من الأول</button>
+  </aside>
+
+  <main class="content" id="content">
+    <div class="hero" id="hero">
+      <img class="hero-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAABlCAMAAADTcTmKAAADAFBMVEVHcEz///////////////////7////////7/f///v8NAKH///////////8eU5n+/v9EZ8v7/Pv////+//8xrP+AtNp7nZ9Y/2D////9/P3////////8/f7//////////////////////v////////////////////////////////8TbP8hT3MTcv7///////////////////////9ctYuh8U3///////////////////8TX/L///8Ta/7///////////////8TV+UbW7UVQKP///////////////8UeP8TXen///8sW57///////////////////////8TQ62Lv9L///8nYaH///////////8SWO7////////29vseZ7v///////8TZ/4TbP0TZfwTXrb///8UZusTUL4TY+L///8TYPX///8TUNESZP4TVMr///////////9dyVb4+voTYO3///8TUdcWYb////8TQKUTWfwSYv4STKkTV9gTVdsUR6ETUrMSVtb///8UUK4TU8wScv/IiboTX98UbPkTTbMSXvkSV/oTVvIUfMUTUOwtpdMSW8kTZfizwFIVVq0UTcUVZNcTRrESRLYWVbITV9MTW90TaPUSXMQSn8kTVsTb0jkSW/YTTL4aWL0UULMTRqwRV8ITS8ETS7gSRb4TYdkTUscTT+ISTN8SQqoSTbEUV6YTUM8TUrsQQswUX/oTVcETUdMTUtQTUMoTWtYUaLIYYbkSQccRSL8Sa9USVckSWd4QWO0TStkTUMkUVK8TVdgTWbwTRb8SZPMbZbUgRZ4TTMsTYugVx+EUZuYTU8M3jNMVUqgRR7UTQK8TT78TUeEUgLoSWdESUr8SZ9oSVLcUduAjT6gTWa93xFoSYMwYXsUSXcISa88TWs0TPbITVtdDabg0a78SRc4sYswTX+AUYegTZN4TZcoTbuFhgb41YbETQ6kSgumIoMZTe8KJqt4TTLMaW7CIqMeCms3U2OP///8TVuEUWtYSUdkVXMoUZ9iJaHwdAAAA+nRSTlMA/Pn6/gT9AQMCAfv39QIFBAfyBgIFBgHbDTOJHOwV4BhbCMlgZ3sj1/Ov+QT776ZOgOXiBAKru6BWt/1j8RI7HxH5Fx6FR6Oy/f5KCULB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" alt="Infinity University Activity"><div class="hero-pill">INFINITY UNIVERSITY ACTIVITY • ML FROM ZERO</div><h2>أهلاً بيك في رحلة Machine Learning</h2>
+      <p>الموقع ده هيمشي معاك من الصفر خالص لحد ما تنفذ مشروع تنبؤ كامل بـ Machine Learning. كل درس فيه شرح بالعامية المصرية، أمثلة محسوبة، كويز بإجابة فورية، وتمارين بالحل. وفي معمل ML جوه المتصفح تجرب فيه الخوارزميات بإيدك. تقدمك بيتحفظ لوحده في المتصفح، فممكن تقفل وترجع تكمل من مكانك.</p>
+      <div class="stats"><span><b>14</b> درس متدرج</span><span><b>56</b> سؤال تفاعلي</span><span><b>3</b> تجارب ML حية</span></div><button id="start-btn" class="cta">ابدأ رحلتك ←</button><p class="hero-hint">من أول "إيه هو ML" لحد مشروع تنبؤ كامل بإيدك</p><p class="small">التقدم محفوظ على نفس المتصفح والجهاز فقط. مسح بيانات المتصفح بيمسحه.</p>
+    </div>
+    <div id="lesson"></div><section class="lesson" id="lab" hidden><h2>معمل ML التفاعلي</h2>
+<p>تلاث تجارب شغالة بالكامل جوه متصفحك: مفيش سيرفر ومفيش نتايج مسجلة، كل رقم بيتحسب قدامك من الداتا. دي نفس الخوارزميات اللي في الدروس، مكتوبة بـ JavaScript عشان تشوف الميكانيكا بإيدك.</p>
+<h3>1) ارسم الخط بنفسك — Linear Regression</h3>
+<p>دي درجات 10 طلاب مقابل ساعات مذاكرتهم (نفس داتا درس 6). شد النقطتين الصفرا في طرفي الخط وقرب الخط من النقط. الرقم اللي بيتقلل اسمه MSE: متوسط مربعات الغلطات (الخطوط الحمرا). لما تتحداك نفسك، اضغط الزرار وشوف الكمبيوتر بيتعلم أحسن خط (Least Squares) في ثانية.</p>
+<canvas id="reg-canvas" class="ml-canvas"></canvas>
+<p id="reg-stats" class="small"></p>
+<button class="cta" id="reg-learn">خلي الكمبيوتر يتعلم ▶</button> <button class="solution-toggle" id="reg-reset">🔄 رجّع الخط</button>
+<h3>2) K-Means على نقراتك — Clustering</h3>
+<p>اضغط جوه المساحة عشان تحط نقط (مثلاً مجموعتين أو تلاثة واضحين)، اختار عدد المجموعات K، وبعدين خطوة بخطوة شوف الخوارزمية: كل نقطة بتتبع أقرب مركز (+) وبعدين المركز بيتحرك لمتوسط نقاطه. شغّل للآخر عشان تشوف الاستقرار.</p>
+<div class="dx-sel"><label>عدد المجموعات K <select id="km-k"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select></label></div>
+<canvas id="km-canvas" class="ml-canvas"></canvas>
+<p id="km-stats" class="small"></p>
+<button class="cta" id="km-step">خطوة واحدة ←</button> <button class="cta" id="km-run">شغّل للآخر ▶</button> <button class="solution-toggle" id="km-clear">🗑️ امسح النقط</button>
+<h3>3) عتبة القرار — Classification</h3>
+<p>30 عميل عندهم "سكور ولاء" من 0 لـ 100: 15 جددوا اشتراكهم (تحت) و15 شالوا (فوق). العتبة الصفرا هي قاعدة الموديل: اللي سكوره أقل منها بيتصنف "هيشيل". شد العتبة يمين وشمال وشوف الـ Confusion Matrix والمقاييس بتتحسب لحظياً: هتلاقي إن Accuracy العالية ممكن تخبي Recall وحش، زي درس 9 بالظبط.</p>
+<canvas id="th-canvas" class="ml-canvas"></canvas>
+<p id="th-stats" class="small"></p>
+<p class="small">التجارب دي تعليمية ومبسطة عن قصد: المكتبات الحقيقية (زي scikit-learn) فيها نفس الأفكار بحسابات أقوى وبيانات أكبر.</p></section>
+  <footer class="small" style="text-align:center;margin:30px 0">من أسرة Infinity University Activity<br><a href="https://scikit-learn.org/stable/getting_started.html">شرح scikit-learn الرسمي</a> · <a href="https://colab.research.google.com/">Google Colab (جرب الكود مجاناً)</a> · <a href="https://www.kaggle.com/learn">Kaggle Learn</a><p>معمل ML محاكي تعليمي مكتوب خصيصاً للموقع: بيحسب الانحدار والتجميع والتصنيف على داتا الكورس جوه متصفحك، مش نسخة من scikit-learn. التطبيق الحقيقي بـ Python في درس 13 والمشروع النهائي.</p>
+    <div class="contact-footer" aria-label="بيانات التواصل">
+      <div class="contact-name">Ahmed Wael Othman</div>
+      <nav class="contact-links" aria-label="روابط التواصل">
+        <a href="https://www.linkedin.com/in/ahmed-wael-othman/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">in <span>LinkedIn</span></a>
+        <a href="mailto:ahmedwaelothman612@gmail.com" aria-label="Email Ahmed Wael Othman">✉ <span>Gmail</span></a>
+        <a href="https://github.com/capwv" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">⌘ <span>GitHub</span></a>
+      </nav>
+    </div>
+  </footer></main>
+</div>
+
+<button class="menu-toggle" id="menu-toggle">☰ الدروس</button>
+
+<script>
+/* ML From Zero — curriculum part 1: intro, types, data */
+var CURRICULUM = window.CURRICULUM || [];
+function P(t){return {type:'p',text:t};}
+function H(t){return {type:'h',text:t};}
+function N(t){return {type:'note',text:t};}
+function W(t){return {type:'note',warn:true,text:t};}
+function L(a){return {type:'list',items:a};}
+function C(t){return {type:'code',code:t};}
+function T(head,rows){return {type:'table',head:head,rows:rows};}
+function Q(q,opts,ans,explain,code){var o={q:q,options:opts.map(function(x){return typeof x==='string'?{text:x}:x;}),answer:ans,explain:explain};if(code)o.code=code;return o;}
+function X(task,code,why,hint){var o={task:task,code:code||'',why:why||''};if(hint)o.hint=hint;return o;}
+
+CURRICULUM.push({
+  id:'intro',
+  nav:'مقدمة: إيه هو Machine Learning؟',
+  title:'الدرس 1: إيه هو Machine Learning أصلاً؟',
+  subtitle:'بدل ما تكتب القواعد بإيدك، بتحط أمثلة والكمبيوتر يستنتج القاعدة',
+  blocks:[
+    P('انت كـ Data Analyst بتعمل كل يوم حاجة مهمة: بتحول داتا لمعلومة. SQL بتجاوب "إيه اللي حصل"، و Power BI بينقلها كصورة. بس فيه سؤال من نوع تاني بيتكرر: "إيه اللي هيحصل بكرة؟" العميل ده هيشيل ولا لأ؟ الطلب ده نصب ولا حقيقي؟ المبيعات الشهر الجاي هتبقى كام تقريباً؟ الأسئلة دي مش بيتجاوب عليها بجمع ولا فلترة. دي بالظبط أرض Machine Learning.'),
+    P('Machine Learning (تعلم الآلة) معناها: بدل ما إنت تكتب القواعد للكمبيوتر بإيدك، بتديله أمثلة كتير من الماضي، وهو بيستنتج القاعدة لوحده. زي ما بتعلم طفل الفرق بين القط والكلب مش بتعريف رسمي، لكن بصور كتير وفي الآخر بيميزهم.'),
+    H('مقارنة بكود عادي'),
+    P('لو عايز تميز إيميل نصب في كود عادي، هتكتب قواعد بنفسك: لو فيه كلمة كذا ولو الرابط مش رسمي ولو... وهتفضل تظبطها طول العمر، وكل ما النصاب يغير حيلته تظبط من الأول. في Machine Learning الوضع بيتقلب:'),
+    L([
+      'كود عادي: قواعد (كتبتها إنت) + داتا ← نتيجة.',
+      'Machine Learning: أمثلة (داتا + إجابات صح من الماضي) ← قاعدة (الموديل) اشتقت لوحدها. بعدين القاعدة دي بتاخد داتا جديدة وتديك نتيجة.'
+    ]),
+    P('القاعدة المستنتجة اسمها موديل (Model)، وعملية الاستنتاج اسمها تدريب (Training). التدريب مش سحر: هو حساب رياضي بيلاقي الأرقام اللي تخلي الموديل يخطي أقل غلط ممكن على أمثلة الماضي.'),
+    H('إنت أصلاً شوفت الفكرة قبل كده'),
+    P('لو عملت Trendline في Excel على نقاط مبيعات، ده حرفياً Machine Learning بسيط: البرنامج حسب معادلة خط من الداتا بدل ما إنت تكتبها. الفرق إن المجال هنا أوسع بكتير: مش بس خط واحد، لكن موديلات بتاخد عشرات الأعمدة وبتصنف وبتجمع وتتنبأ.'),
+    N('تعريف عملي تحفظه: Machine Learning هو إن البرنامج يحسن أداءه في مهمة معينة كل ما يشوف أمثلة أكتر، من غير ما حد يبرمجه بقاعدة جديدة في كل مرة.'),
+    H('ليه ده مهم ليك كـ Data Analyst'),
+    L([
+      'التحليل الوصفي (إيه اللي حصل) ده شغلك الأساسي. الـ ML بيفتح باب التحليل التنبؤي (إيه اللي ممكن يحصل) بنفس داتا بتاعتك.',
+      'أسئلة الإنترفيو في الشركات الكبيرة بقت فيها دايماً جزء عن مفاهيم الـ ML، حتى لو الوظيفة مش Machine Learning Engineer.',
+      'فهمك للمنطق بيخليك تعرف إمتى النتيجة اللي طلعها الموديل مضروبة أو متبالغ فيها، ودي عين ناقد أي حد شغال بالداتا محتاجها.'
+    ]),
+    W('الموقع ده مش هيعملك Machine Learning Engineer. ده مقدمة مفاهيم بإيدك: هتفهم الصورة الكبيرة وتجرب بإيدك في المعمل، وتعرف تتكلم مع المهندسين بلغتهم. التعمق في الرياضيات والموديلات المتقدمة سيبه للخطوة اللي بعدها.')
+  ],
+  quiz:[
+    Q('إيه الفرق الجوهري بين الكود العادي و Machine Learning؟',['ML أسرع في التنفيذ','في ML القاعدة بتتستنتج من الأمثلة بدل ما المبرمج يكتبها','ML مبيحتاجش داتا خالص'],1,'في الكود العادي إنت بتكتب القاعدة. في ML بتدّي أمثلة مع إجاباتها والخوارزمية بتستنتج القاعدة (الموديل) لوحدها.'),
+    Q('عملية إن الموديل "يتعلم" من أمثلة الماضي اسمها:',['Deployment','Training','Cleaning'],1,'التدريب (Training) هو إن الخوارزمية تظبط أرقام الموديل لحد ما يقلل الغلط على أمثلة التدريب.'),
+    Q('عملت Trendline في Excel على نقاط مبيعاتك. ده يعتبر:',['حاجة ملهاش علاقة بـ ML','أبسط صور ML: معادلة اتعلمت من الداتا بدل ما تكتبها بإيدك','قاعدة بيانات'],1,'الـ Trendline خط اتعمل Fit على النقاط تلقائياً. دي نفس فكرة Linear Regression اللي هنشرحها في درس 6.'),
+    Q('الموقع ده هيوصلك لفين؟',['Machine Learning Engineer جاهز للشغل','فهم المفاهيم الأساسية وتجربة عملية صغيرة وربطها بشغل التحليل','تعلم بناء Neural Networks ضخمة'],1,'مقدمة مفاهيم للـ Data Analyst: الصورة الكبيرة، التجربة بالإيد، والربط بمسار SQL و Python و Excel و Power BI.')
+  ],
+  exercises:[
+    X('اكتب 3 أسئلة من شغلك أو دراستك إجابتهم موجودة "ضمنياً" في داتا الماضي (يعني تقدر تتعلم من أمثلة قديمة)','','أمثلة مقبولة: هل الطالب ده هينجح؟ هل العميل ده هيجدد الاشتراك؟ المبيعات هتبقى كام الشهر الجاي؟ المهم يكون عندك داتا ماضي فيها السؤال والإجابة.'),
+    X('فرّق في جملة واحدة بين سؤال بيتحل بـ SQL وسؤال محتاج ML','','SQL بيجاوب على داتا موجودة فعلاً (مجاميع، فلاتر، حسابات على الماضي المسجل). ML بيستنتج قاعدة من الماضي عشان يتنبأ بحاجة مش مكتوبة في الداتا: تصنيف صف جديد أو رقم مستقبلي.'),
+    X('فكر في ميزة في موبايلك واضح إنها بتتعلم من سلوكك واكتبها','','زي اقتراحات الكلمات في الكيبورد، توصيات YouTube، أو الفلتر التلقائي للسبام. الملاحظة المهمة: كلها بتتحسن كل ما تستخدمها أكتر (أمثلة أكتر).')
+  ]
+});
+
+CURRICULUM.push({
+  id:'types',
+  nav:'أنواع التعلم الثلاثة',
+  title:'الدرس 2: Supervised و Unsupervised و Reinforcement',
+  subtitle:'خريطة المجال كله في 3 عائلات، وإيه اللي يهمك منهم',
+  blocks:[
+    P('Machine Learning مش حاجة واحدة. فيه 3 عائلات كبيرة، والفرق بينهم في سؤال واحد: الداتا اللي معاك فيها الإجابة الصح ولا لأ؟'),
+    H('1. Supervised Learning: تعلم بإشراف (معاك الإجابات)'),
+    P('ده أشهر نوع وأكتر نوع هتقابله. الداتا بتاعتك عبارة عن أمثلة كل مثال فيه المدخلات (Features) والإجابة الصح (Label). الموديل بيتعلم العلاقة بينهم عشان يتوقع الإجابة لأمثلة جديدة. Supervised بينقسم لمشكلتين:'),
+    L([
+      'Regression: الإجابة رقم. توقع مبيعات الشهر الجاي، توقع سعر شقة، توقع درجة طالب من ساعات مذاكرته.',
+      'Classification: الإجابة فئة. العميل هيشيل ولا لأ، الإيميل سبام ولا لأ، الصورة فيها قط ولا كلب.'
+    ]),
+    P('مثال من داتا بتاعتك: جدول فيه عمود ساعات المذاكرة وعمود الدرجة النهائية لعشرة طلاب. ده Supervised لأن كل صف معاه الإجابة (الدرجة). لو الإجابة رقم زي الدرجة يبقى Regression، ولو حولناها ناجح/راسب تبقى Classification.'),
+    H('2. Unsupervised Learning: بدون إجابات'),
+    P('هنا معاك داتا من غير Label خالص، والمطلوب إن الخوارزمية تكتشف فيها تركيب مخفي. أشهر مهمة هي Clustering: تقسيم الصفوف لمجموعات متشابهة. زي تقسيم عملاء متجر لشرائح (عملاء كبار ومنتظمين، عملاء مناسبات، عملاء مرة واحدة) من غير ما حد يقولك الشرائح دي موجودة أصلاً.'),
+    N('كـ Data Analyst ده قريب منك جداً: تقسيم العملاء لشرائح (Segmentation) اللي بتعمله بعينك أو بـ Pivot Tables، الـ Clustering بيعمله تلقائياً على أعمدة كتير في نفس الوقت.'),
+    H('3. Reinforcement Learning: تعلم بالتجربة والمكافأة'),
+    P('هنا مفيش داتا ماضي أصلاً. فيه Agent بياخد قرارات في بيئة، وكل قرار ليه مكافأة أو عقاب، وهو بيتعلم الاستراتيجية اللي بتجمع أكبر مكافأة على المدى الطويل. ده اللي بيلعب الشطرنج وبيتحكم في الروبوتات وعربيات القيادة الذاتية. هتعرف إنه موجود وخلاص، مش هنتعمق فيه.'),
+    H('إزاي تختار؟'),
+    L([
+      'معاك أمثلة + إجابات صح وعايز تتوقع الإجابة لجديد؟ Supervised.',
+      'معاك داتا بس وعايز تكتشف مجموعات أو أنماط فيها؟ Unsupervised.',
+      'مشكلة قرارات متتالية وبيئة بترد على القرار؟ Reinforcement (وهنا بندور على مهندس متخصص).'
+    ]),
+    W('مش كل حاجة فيها "ذكاء" هي ML. تقرير Power BI ذكي أو معادلة Excel معقدة لسه قواعد مكتوبة بإيد بشر. الاختبار: القاعدة اتعلمت من أمثلة لوحدها ولا حد كتبها؟')
+  ],
+  quiz:[
+    Q('عندك جدول عملاء فيه أعمدة (السن، الدخل، عدد الطلبات) وعمود "جدد اشتراكه ولا لأ". عايز تتوقع التجديد لعملاء جدد. ده:',['Unsupervised','Supervised - Classification','Supervised - Regression'],1,'معاك Label (جدد/لأ) وبتتوقع فئة: Supervised Classification. لو كنت بتتوقع رقم زي قيمة مشترياته الجاية كانت تبقى Regression.'),
+    Q('عايز تقسم عملاء المتجر لمجموعات متشابهة في سلوك الشراء من غير ما تكون عارف المجموعات مسبقاً. ده:',['Supervised','Unsupervised - Clustering','Reinforcement'],1,'مفيش Label ولا إجابة صح، بندور على تركيب مخفي: Clustering من عائلة Unsupervised.'),
+    Q('توقع مبيعات الشهر الجاي من بيانات السنين اللي فاتت يعتبر:',['Classification','Regression','Clustering'],1,'الإجابة رقم مستمر (مبلغ مبيعات) مش فئة، يبقى Regression.'),
+    Q('برنامج بيتعلم يلعب لعبة عن طريق إنه يجرب وياخد نقاط لما يكسب. ده:',['Supervised','Unsupervised','Reinforcement'],2,'تعلم بالتجربة والمكافأة في بيئة بتتغير: Reinforcement Learning.')
+  ],
+  exercises:[
+    X('صنّف الأسئلة دي Supervised ولا Unsupervised: (1) توقع سعر شقة من مواصفاتها، (2) اكتشاف أنواع العملاء في قاعدة بيانات، (3) كشف معاملات نصب من معاملات سابقة معروف إنها نصب','','(1) Supervised Regression (رقم + معاك إجابات). (2) Unsupervised Clustering (مفيش Label). (3) Supervised Classification (فئة + معاك أمثلة معلمة).'),
+    X('من داتا مواقع الأكاديميات اللي اتعلمتها (جدول sales في SQL و Power BI)، اقترح سؤال Supervised واحد وسؤال Unsupervised واحد','','Supervised مثلاً: توقع revenue طلب جديد من الـ product والـ city (لو جمعت داتا أكتر). Unsupervised: تجميع الطلبات أو العملاء في شرائح حسب revenue والـ category من غير شرائح جاهزة.'),
+    X('ليه "عدد السكريبتات اللي كتبتها في بايثون" مش Label صالح لمسألة Classification؟','','لأنه رقم مستمر مش فئة. ممكن يبقى Label لمسألة Regression (توقع العدد)، أو تحوله لفئات (مبتدئ/متوسط/متقدم) وقتها يصلح لـ Classification.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'data',
+  nav:'الداتا: Features و Labels',
+  title:'الدرس 3: الداتا اللي الموديل بياكلها: Features و Labels',
+  subtitle:'نفس الجدول اللي بتعرفه من Excel، بس بأسماء جديدة وقواعد أصرم',
+  blocks:[
+    P('أي داتا Machine Learning في شغل الـ Analyst بتبقى جدول: صفوف وأعمدة، زي بالظبط شيت Excel أو جدول SQL اللي إنت متعود عليه. الفرق بس في إحنا بنبص على الأعمدة بعينين مختلفتين:'),
+    L([
+      'Features (الخصائص): الأعمدة اللي الموديل بيستخدمها كمدخلات عشان يتوقع. الرمز المتعارف عليه X.',
+      'Label / Target (الهدف): العمود اللي عايزين نتوقعه. الرمز المتعارف عليه y.'
+    ]),
+    P('خد الجدول ده اللي هنرجعله طول الكورس. عشرة طلاب، عندنا ساعات مذاكرتهم ودرجاتهم في امتحان:'),
+    T(['hours_studied','final_score'],[
+      ['1','52'],['2','55'],['3','61'],['4','63'],['5','70'],
+      ['6','68'],['7','74'],['8','79'],['9','83'],['10','88']
+    ]),
+    P('هنا `hours_studied` هو الـ Feature و `final_score` هو الـ Label. الموديل هيتعلم من العشرة صفوف دول العلاقة بين المذاكرة والدرجة، وبعدها نقدر نتوقع درجة طالب جديد ذاكر 12 ساعة مثلاً.'),
+    H('قاعدة ذهبية: الموديل بياكل أرقام'),
+    P('الخوارزميات دي في آخرها حساب رياضي، فكل حاجة لازم تتحول لأرقام قبل التدريب:'),
+    L([
+      'أرقام أصلاً (سن، سعر، ساعات): تدخل على طول، بس أحياناً محتاجة Scaling (توحيد المقياس) زي ما هنشوف في درس الـ Clustering.',
+      'فئات (مدينة، نوع منتج): بتتحول لأرقام. أشهر طريقة One-Hot Encoding: عمود جديد لكل فئة فيه 0 أو 1.',
+      'تواريخ: بتتفك لخصائص (اليوم، الشهر، يوم الأسبوع، الفرق من تاريخ معين).',
+      'نصوص: موضوع كبير لوحده (NLP)، مش هنتعمق فيه هنا.'
+    ]),
+    N('لو فاكر درس أنواع البيانات في أكاديمية Excel أو SQL: نفس الفكرة بالظبط. النوع الغلط هنا مش بس بيبوظ العرض، ده بيبوظ التعلم نفسه.'),
+    H('جودة الداتا قبل كميتها'),
+    P('الموديل بيتعلم اللي في الداتا بكل عيوبها. داتا فيها أخطاء أو قيم فاضية أو تحيز، الموديل هيتعلم الأخطاء والتحيز دي بالظبط. القاعدة المشهورة: Garbage in, garbage out. عشان كده شغل تنضيف الداتا اللي اتعلمته في Power Query و Python هو نفسه أهم خطوة في أي مشروع ML.'),
+    L([
+      'قيم فاضية: هتتعامل معها إزاي (حذف، تعويض بالمتوسط أو الوسيط)؟',
+      'Outliers: قيمة شاذة واحدة ممكن تشد الموديل كله في اتجاه غلط.',
+      'تكرار الصفوف: صف مكرر معناه إن المثال ده بيتوزن مرتين.',
+      'تحيز العينة: لو داتاك كلها من مدينة واحدة، متستغربش لما الموديل يغلط على مدينة تانية.'
+    ]),
+    W('أهم سؤال قبل أي مشروع: الـ Features اللي عندي فعلاً فيها معلومة عن الـ Label؟ لو لأ، مهما الموديل كان شاطر النتيجة هتبقى وحشة. علاقة السببية دي مش رياضيات، دي فهمك للبيزنس نفسه.')
+  ],
+  quiz:[
+    Q('في جدول الطلاب اللي فوق، إيه الـ Label وإيه الـ Feature؟',['hours_studied هو الـ Label','final_score هو الـ Label و hours_studied هو الـ Feature','الاتنين Features'],1,'الـ Label هو اللي عايزين نتوقعه (الدرجة)، والـ Feature هو المدخل اللي بنبني عليه التوقع (ساعات المذاكرة).'),
+    Q('عمود "المدينة" (Cairo و Giza و Alexandria) عايز تدخله الموديل. الطريقة الصح:',['نسيبه نص زي ما هو','One-Hot Encoding: عمود رقمي لكل مدينة فيه 0 أو 1','نحول كل مدينة لرقم عشوائي'],1,'الموديل بياكل أرقام. One-Hot بيعمل عمود لكل فئة (1 لو الصف من الفئة دي و0 لو لأ) من غير ما توهم الموديل إن فيه ترتيب رقمي بين المدن.'),
+    Q('معنى Garbage in, garbage out في سياق ML:',['الموديل بيصلح الداتا الوحشة لوحده','داتا وحشة أو متحيزة هتنتج موديل وحش مهما كانت الخوارزمية','لازم نمسح كل الصفوف الفاضية دايماً'],1,'الموديل بيتعلم من اللي بيأكله. أخطاء وتحيز الداتا بتتعلم مع القاعدة، فتنضيف الداتا أهم من اختيار الخوارزمية.'),
+    Q('داتا التدريب كلها عملاء من القاهرة بس، والموديل غلط لما اتجرب على إسكندرية. ده مثال على:',['Overfitting بس','تحيز في العينة (الداتا مش ممثلة للواقع)','إن ML مش نافع'],1,'العينة مش ممثلة للمجتمع اللي الموديل هيشتغل عليه. المشكلة في الداتا مش في الخوارزمية.')
+  ],
+  exercises:[
+    X('في جدول موظفين فيه (السن، القسم، سنين الخبرة، المرتب). لو عايز تتوقع المرتب لموظف جديد، حدد الـ Features والـ Label','','Label: المرتب. Features: السن وسنين الخبرة والقسم (بعد ما نحول القسم لأرقام بـ One-Hot). مفيش قاعدة إن كل الأعمدة لازم تدخل: بس دي أعمدة منطقياً ليها علاقة بالمرتب.'),
+    X('ليه تحويل المدن لأرقام (Cairo=1 و Giza=2 و Alexandria=3) طريقة غلط غالباً؟ وإيه البديل؟','','لأنها بتوهم الموديل إن Alexandria "أكبر" من Cairo بمقدار 2، وإن فيه ترتيب ومسافات بين الفئات، وده مش حقيقي. البديل: One-Hot Encoding.'),
+    X('راجع جدول الطلاب العشرة اللي فوق: لو لقيت صف فيه ساعات مذاكرة 60 ساعة في الأسبوع، إيه اللي هتعمله قبل التدريب؟','','قيمة شبه مستحيلة (الأسبوع فيه 168 ساعة أصلاً) يعني Outlier أو خطأ إدخال. نراجع المصدر: لو خطأ إدخال نصححه أو نحذفه، لأنه هيشد الخط بتاع Regression في اتجاه غلط.')
+  ]
+});
+
+</script>
+<script>
+/* ML From Zero — curriculum part 2: train/test, overfitting, linear regression */
+
+CURRICULUM.push({
+  id:'traintest',
+  nav:'فكرة Train/Test Split',
+  title:'الدرس 4: ليه بنخبي جزء من الداتا؟ Train/Test Split',
+  subtitle:'إزاي تعرف إن الموديل "فاهم" مش "حافظ"',
+  blocks:[
+    P('تخيل طالب بيذاكر من امتحانات السنين اللي فاتت، وجاله امتحان نفس الأسئلة بالظبط فجاب 100%. هل ده معناه إنه فاهم؟ لأ، ممكن يكون حافظ الإجابات. عشان تعرف الحقيقة، لازم تمتحنه في أسئلة ما شفهاش قبل كده. نفس المنطق بالظبط بيطبق على الموديل.'),
+    P('لو قيّمت الموديل على نفس الداتا اللي اتدرب عليها، هيديك رقم متفائل كاذب. الموديل ممكن يكون "حافظ" الأمثلة بدل ما "فهم" القاعدة، والحافظ بينهار أول ما يشوف داتا جديدة، ودي في الآخر الحاجة الوحيدة اللي تهتم بيها.'),
+    H('الحل: قسّم الداتا'),
+    L([
+      'Training Set (بيانات التدريب): الجزء الأكبر، عادة 70-80% من الصفوف. الموديل بيتعلم منه بس.',
+      'Test Set (بيانات الاختبار): الجزء الباقي، بيتحبس في درج لحد ما التدريب يخلص خالص، وبعدين بنقيس بيه أداء الموديل.',
+      'التقسيم بيتم عشوائياً (Shuffle) عشان ميبقاش فيه ترتيب مخفي في الداتا يأثر على النتيجة.'
+    ]),
+    P('الرقم اللي بيطلع على الـ Test Set هو تقييمك الحقيقي: ده أقرب تخمين عندك لأداء الموديل على داتا المستقبل. الرقم على الـ Training Set مالوش قيمة تقييمية تقريباً.'),
+    H('قاعدة أهم: الـ Test Set مش دمية تجارب'),
+    P('الـ Test Set بيتستخدم مرة واحدة في الآخر. لو قيست عليه ونتيجتك مش عاجباك فرجعت تظبط الموديل وقست عليه تاني، إنت كده "سربت" معلومة من الاختبار للتدريب، والرقم بقى متفائل تاني. المحترفين بيحلوا ده بقسمة تالتة اسمها Validation Set (أو تقنية Cross-Validation) للتجارب والتظبيط، ويسيبوا الـ Test Set للتقييم النهائي بس.'),
+    N('في scikit-learn التقسيم سطر واحد: `train_test_split(X, y, test_size=0.2, random_state=42)`. معامل random_state بيثبت العشوائية عشان تجاربك تتكرر بنفس النتيجة.'),
+    H('استثناء مهم: الداتا الزمنية'),
+    P('لو داتاك مرتبة بالزمن (مبيعات شهرية مثلاً)، التقسيم العشوائي غلط: هتتدرب على المستقبل وتتختبر على الماضي، وده تسريب. الصح: اتدرب على الفترة الأقدم واتختبر على الأحدث، زي الواقع بالظبط.')
+  ],
+  quiz:[
+    Q('موديل جاب 99% على بيانات التدريب و 60% على بيانات الاختبار. ده معناه غالباً:',['الموديل ممتاز','الموديل حافظ أمثلة التدريب ومش بيعمم على داتا جديدة','بيانات الاختبار فيها مشكلة أكيد'],1,'الفجوة الكبيرة بين أداء التدريب والاختبار علامة كلاسيكية إن الموديل حفظ مش فهم (Overfitting، هنتكلم عنها في الدرس الجاي).'),
+    Q('ليه بنقسم الداتا Train/Test أصلاً؟',['عشان نوفر مساحة تخزين','عشان نقيس أداء الموديل على داتا ما شفهاش أثناء التدريب','عشان نسرّع التدريب'],1,'التقييم على داتا جديدة هو التقدير الواقعي الوحيد لأداء الموديل في المستقبل.'),
+    Q('ظبطت الموديل كذا مرة بناءً على نتيجته على الـ Test Set لحد ما الرقم عجبك. المشكلة إن:',['مفيش مشكلة، الرقم عالي','كده الـ Test Set اتسرب لعملية التظبيط وبقى تقييمه متفائل','لازم كنت أستخدم ملف Excel'],1,'كل مرة بتستخدم فيها الـ Test Set لاتخاذ قرار بيبطّل كونه اختبار محايد. الحل: Validation Set للتجارب و Test للتقييم النهائي.'),
+    Q('عندك مبيعات شهرية لـ 3 سنين وعايز تتوقع المستقبل. التقسيم الصح:',['عشوائي 80/20','أتدرب على الشهور الأقدم وأتختبر على الأحدث زمنياً','أتدرب على الكل وأتختبر على الكل'],1,'في الداتا الزمنية التقسيم العشوائي بيسرب معلومة من المستقبل. بنحاكي الواقع: تدريب على الماضي واختبار على المستقبل.')
+  ],
+  exercises:[
+    X('عندك 1000 صف طلبات. اقترح تقسيمة Train/Test بعدد الصفوف، وقول ليه التقسيم بيكون عشوائي','','مثلاً 800 تدريب و200 اختبار (80/20). العشوائية بتمنع أي ترتيب مخفي في الملف (زي إن الطلبات مرتبة بالتاريخ أو الحجم) من إنه يخلي مجموعة منهم مختلفة عن التانية.'),
+    X('صاحبك بيقول: "موديلي جاب 100% على الداتا اللي اتدرب عليها!" رد عليه بسؤال واحد يكشف الحقيقة','','"جميل، طب جاب كام على Test Set ما شافهوش؟" الرقم على بيانات التدريب مابيثبتش فهم، مابيثبتش غير إنه شاف الداتا دي.'),
+    X('إيه الـ Data Leakage (تسريب الداتا)؟ اذكر مثال واحد','','إن معلومة من المفروض تكون مخفية توصل للتدريب. أمثلة: استخدام الـ Test Set في تظبيط الموديل، أو Feature فيها معلومة من المستقبل (زي عمود "هل تم إلغاء الطلب" كـ Feature لتوقع "هل هيتم إلغاء الطلب").')
+  ]
+});
+
+CURRICULUM.push({
+  id:'overfit',
+  nav:'Overfitting و Underfitting',
+  title:'الدرس 5: Overfitting و Underfitting: أشهر مرضين للموديلات',
+  subtitle:'موديل حافظ الدرس ومش فاهمه، وموديل مش باذل مجهود أصلاً',
+  blocks:[
+    P('في الدرس اللي فات شوفنا موديل جاب 99% على التدريب و 60% على الاختبار. المشكلة دي ليها اسم: Overfitting. وهي وعكسها Underfitting أهم مفهومين هتسمع عنهم في أي نقاش ML.'),
+    H('Underfitting: الموديل أبسط من المشكلة'),
+    P('Underfitting يعني الموديل مش قادر يمسك النمط الموجود في الداتا أصلاً. زي ما ترسم خط مستقيم على نقاط شكلها قوس: الخط هيفشل يوصفها مهما ظبطته. الأعراض: أداء وحش على التدريب وعلى الاختبار على السواء. الحل: موديل أقدر (Features أكتر أو خوارزمية أنسب)، مش داتا أكتر.'),
+    H('Overfitting: الموديل حفظ الدرس ومش فاهمه'),
+    P('Overfitting يعني الموديل حفظ أمثلة التدريب بكل تفاصيلها وضوضاها (Noise) بدل ما يتعلم القاعدة العامة. زي طالب حفظ حلول مسائل الكتاب حرفياً، فأي مسألة بأرقام جديدة تلخبطه. الأعراض: أداء ممتاز على التدريب، أداء أسوأ بشكل واضح على الاختبار. الفجوة دي هي الإنذار.'),
+    H('المنطقة الحلوة في النص'),
+    P('تخيل محور أفقي: تعقيد الموديل بيزيد من الشمال لليمين. في أوله Underfitting (بسيط أوي)، وفي آخره Overfitting (معقد أوي). الهدف مش أعلى دقة على التدريب: الهدف أعلى دقة على الاختبار، ودي بتكون في نقطة وسط اسمها أحياناً Sweet Spot. الموديل البسيط اللي بيعمم أحسن من المعقد اللي بيحفظ.'),
+    N('قاعدة عملية تحكم بيها قرارات كتير: لما تكون في شك، ابدأ بموديل بسيط. خط مستقيم شغال على داتا جديدة أحسن من منحنى معقد حافظ الماضي. وده سبب إن Linear Regression لسه شغال في شركات كبيرة لحد النهارده.'),
+    H('إزاي تعالج Overfitting؟'),
+    L([
+      'داتا أكتر: أقوى دواء. الموديل يصعب عليه يحفظ 100 ألف مثال.',
+      'موديل أبسط: قلل التعقيد (Features أقل أو خوارزمية أبسط).',
+      'Regularization: تقنية بتعاقب الموديل على التعقيد أثناء التدريب (هتقابلها بعدين بأسماء زي L1 و L2).',
+      'تنضيف الداتا: الضوضاء والـ Outliers بتاكلها الموديلات المعقدة بالملعقة.'
+    ])
+  ],
+  quiz:[
+    Q('موديل أداؤه وحش على بيانات التدريب نفسها. التشخيص الأرجح:',['Overfitting','Underfitting','الموديل مثالي'],1,'لو فشل حتى على اللي اتدرب عليه، يبقى مش قادر يمسك النمط أصلاً: Underfitting. Overfitting بالعكس: ممتاز على التدريب وحش على الجديد.'),
+    Q('الهدف الحقيقي لما بتظبط موديل هو:',['أعلى دقة على بيانات التدريب','أعلى دقة على بيانات الاختبار (التعميم)','أكبر عدد Features'],1,'إحنا بنبني الموديل عشان داتا المستقبل اللي ما شفهاش. دقة الاختبار هي المقياس، ودقة التدريب مجرد أداة تشخيص.'),
+    Q('أنهي من دول مش علاج مناسب لـ Overfitting؟',['جمع داتا تدريب أكتر','زيادة تعقيد الموديل أكتر','استخدام Regularization'],1,'زيادة التعقيد بتحفظ أكتر مش أقل. العلاجات: داتا أكتر، موديل أبسط، Regularization، وتنضيف الداتا.'),
+    Q('موديل خط مستقيم (Linear) على داتا علاقتها منحنى واضح. ده مثال على:',['Overfitting','Underfitting','تعميم ممتاز'],1,'الخط المستقيم أبسط من إنه يوصف منحنى، فهيغلط على التدريب والاختبار معاً: Underfitting.')
+  ],
+  exercises:[
+    X('صنّف كل حالة: (1) تدريب 95% واختبار 94%، (2) تدريب 99% واختبار 65%، (3) تدريب 60% واختبار 58%','','(1) موديل سليم وبيعمم كويس. (2) Overfitting واضح: الفجوة 34% بتقول إنه حافظ. (3) Underfitting: مش قادر يمسك النمط حتى في التدريب.'),
+    X('ليه داتا أكتر بتعالج Overfitting؟ اشرحها بمثال طالب بيذاكر','','الطالب اللي حل 10 مسائل يقدر يحفظهم، اللي حل 1000 مسألة مستحيل يحفظهم فمضطر يفهم القاعدة. نفس الكلام: مع أمثلة كتير ومتنوعة، الحفظ بيبقى أصعب من التعلم الحقيقي.'),
+    X('زميلك فخور إنه ضاف 50 Feature للموديل والدقة على التدريب زادت. إيه تعليقك؟','','زيادة الـ Features بتزود التعقيد وترفع أداء التدريب شكلياً، لكن ممكن تكون بتزود Overfitting. السؤال المهم: أداء الاختبار زاد ولا قل؟ من غير الإجابة دي الرقم ده مالوش معنى.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'linreg',
+  nav:'Linear Regression',
+  title:'الدرس 6: Linear Regression: أول موديل بجد',
+  subtitle:'خط مستقيم واحد، وفيه كل أفكار ML: تخمين، غلط، وتعلم',
+  blocks:[
+    P('أبسط موديل في الدنيا وأكترهم استخداماً في الشغل الحقيقي: خط مستقيم. Linear Regression بيفترض إن العلاقة بين الـ Feature والـ Label خط: كل ساعة مذاكرة زيادة بتزود الدرجة بمقدار ثابت تقريباً. معادلة الخط: `score = intercept + slope × hours`. الموديل "يتعلم" معناه إنه يلاقي أحسن رقمين للـ intercept و slope.'),
+    P('هنشتغل على داتا درس 3: عشرة طلاب بساعات مذاكرتهم ودرجاتهم. عايزين خط يقرب من كل النقط قدر الإمكان.'),
+    H('إزاي الخوارزمية "بتتعلم"؟ بالتخمين والقياس'),
+    L([
+      'ابدأ بأي خط: slope و intercept عشوائيين.',
+      'احسب غلطة الخط: لكل نقطة، الفرق بين درجتها الحقيقية وتوقع الخط (اسمه Residual). ربّع الفروق وخد متوسطها: ده اسمه MSE (Mean Squared Error).',
+      'حرّك slope و intercept شوية في الاتجاه اللي بيقلل MSE (ده اسمه Gradient Descent: نزول تدريجي على منحدر الغلط).',
+      'كرر لحد ما MSE ميبقاش بينزل. كده الموديل "اتدرب".'
+    ]),
+    P('ليه التربيع؟ عشان الغلط الموجب والسالب ما ياكلوش بعض، وعشان الغلطات الكبيرة تتعاقب أضعاف. داتا العشرة طلاب بتاعتنا، أحسن خط (اللي الخوارزمية بتوصله) هو: `score = 47.93 + 3.88 × hours` وده MSE بتاعه 2.3 تقريباً. قارنه بخط أفقي على متوسط الدرجات (69.3 للكل): MSE بتاعه 126.8. الخط المتعلم أحسن من التخمين البليد بأكتر من 50 مرة.'),
+    N('جرب بنفسك دلوقتي: في معمل ML فوق، تجربة "ارسم الخط" بتخليك تحرك خط بإيدك على نفس النقط العشرة وتشوف MSE بيتغير لحظياً، وبعدين اضغط "خلي الكمبيوتر يتعلم" يجيب نفس أرقامنا: slope قريب من 3.88 و intercept قريب من 47.93.'),
+    H('مثال محسوب بإيدينا'),
+    P('خد 5 طلاب أصغر عشان نشوف الحساب: (2,55) و(4,65) و(6,70) و(8,80) و(10,90). أحسن خط ليهم: `score = 46.5 + 4.25 × hours`. يعني كل ساعة مذاكرة إضافية مرتبطة بزيادة 4.25 درجة في المتوسط، وطالب ذاكر 7 ساعات توقعه: 46.5 + 4.25×7 = 76.25.'),
+    H('أكتر من Feature؟'),
+    P('الخط بيبقى معادلة فيها حد لكل Feature: `score = b + w1×hours + w2×sleep + w3×attendance`. نفس الفكرة بالظبط بس في أبعاد أكتر. الأوزان (w) بقت بتقولك كل Feature مساهم بقد إيه في التوقع، ودي معلومة تحليلية في حد ذاتها.'),
+    W('تفسير مهم للـ Analyst: slope = 4.25 معناه ارتباط مش سببية. ممكن ساعات المذاكرة فعلاً بتزود الدرجة، وممكن الاتنين نتيجة حاجة تالتة (طالب مجد أصلاً). الموديل بيلاقي العلاقة، وتفسيرها ده شغلك إنت مش شغله.')
+  ],
+  quiz:[
+    Q('في معادلة `score = 46.5 + 4.25 × hours` الرقم 4.25 معناه:',['الدرجة لما المذاكرة صفر','كل ساعة مذاكرة إضافية مرتبطة بزيادة 4.25 في التوقع','عدد الطلاب'],1,'الـ slope هو ميل الخط: مقدار تغير التوقع مع كل وحدة زيادة في الـ Feature. الـ 46.5 هو الـ intercept (نقطة البداية عند صفر).'),
+    Q('طالب ذاكر 7 ساعات. توقع الخط `score = 46.5 + 4.25 × hours`:',['76.25','72.00','80.50'],0,'46.5 + 4.25×7 = 46.5 + 29.75 = 76.25.'),
+    Q('إيه هو MSE؟',['متوسط الفروق بين التوقع والحقيقة بعد تربيعها','عدد النقط فوق الخط','أكبر غلطة في الداتا'],0,'لكل نقطة: (التوقع - الحقيقة)²، وبعدين المتوسط. التربيع بيمنع الإشارات من إلغاء بعضها وبيكبّر عقاب الغلطات الكبيرة.'),
+    Q('ليه "خلي الكمبيوتر يتعلم" في المعمل بيطلع أحسن من أي خط هترسمه بإيدك؟',['لأنه أسرع منك بس','لأن Least Squares بيضمن رياضياً أقل MSE ممكن لخط مستقيم على الداتا دي','لأن الكمبيوتر مش بيغلط أبداً'],1,'في Linear Regression الحل الأمثل له معادلة مباشرة (Least Squares) بتدي أقل MSE ممكن رياضياً. إيدك ممكن تقرب لكن متهزمش الضمان الرياضي.')
+  ],
+  exercises:[
+    X('من خط الخمس طلاب: `score = 46.5 + 4.25 × hours`، احسب توقع طالب ذاكر 12 ساعة، وعلق على النتيجة','','46.5 + 4.25×12 = 97.5. التعليق المهم: 12 ساعة بره نطاق الداتا اللي اتدربنا عليها (من 2 لـ 10)، فالتوقع ده استقراء (Extrapolation) وثقته أقل. ممكن العلاقة تتكسر عند المذاكرة المفرطة.'),
+    X('درجة طالب الحقيقية 80 وتوقع الخط 76.25. احسب الـ Residual ومرّبعه','','Residual = التوقع - الحقيقة = 76.25 - 80 = -3.75 (بعض المراجع تعكس الإشارة: الحقيقة - التوقع = 3.75، المربع واحد). مربعه = 14.0625. مجموع المربعات دي على كل النقط هو اللي الخوارزمية بتقلله.'),
+    X('افتح تجربة "ارسم الخط" في معمل ML: حرك الخط لحد ما توصل MSE أقل من 10، وسجل قيم slope و intercept اللي وصلتلها. بعدين اضغط زرار التعلم وقارن','','الكومبيوتر هيوصل لـ slope ≈ 3.88 و intercept ≈ 47.93 و MSE ≈ 2.3. لو إنت وصلت MSE قريب من 3 بإيدك فإنت عملت Gradient Descent بعينك: جرب وقس وعدل. دي كل قصة التدريب.'),
+    X('ليه خط أفقي عند المتوسط (69.3) MSE بتاعه كبير (126.8) رغم إنه "متوسط صح"؟','','المتوسط بيتجاهل الـ Feature خالص: بيدي نفس التوقع لطالب ذاكر ساعة وطالب ذاكر عشرة. الخط المتعلم بيستغل معلومة الساعات فبيقلل الغلط لأقل من 1/50 منه.')
+  ]
+});
+
+</script>
+<script>
+/* ML From Zero — curriculum part 3: classification, clustering, metrics */
+
+CURRICULUM.push({
+  id:'classification',
+  nav:'Classification',
+  title:'الدرس 7: Classification: توقع الفئات مش الأرقام',
+  subtitle:'من "هتيجي كام؟" لـ "هينجح ولا لأ؟"',
+  blocks:[
+    P('في Regression كنا بنتوقع رقم. Classification بتتوقع فئة: ناجح/راسب، سبام/مش سبام، هيشيل/هيجدد. أشهر صورة ليها هي Binary Classification (فئتين بس)، وهي اللي هنركز عليها.'),
+    H('ليه منستخدمش Linear Regression للفئات؟'),
+    P('ممكن نحول الفئات لأرقام (ناجح=1 وراسب=0) ونعمل Regression، بس الخط بيطلع قيم زي 1.3 أو -0.2: إيه يعني نجاح بمقدار 1.3؟ والأخطر إن نقطة واحدة بعيدة (طالب ذاكر 60 ساعة) هتشد الخط وتقلب التصنيف كله. محتاجين حاجة مضغوطة بين 0 و 1.'),
+    H('Logistic Regression: احتمال مش رقم'),
+    P('أشهر خوارزمية تصنيف وأبسطها: Logistic Regression (سيبك من اسمها، هي Classification مش Regression). بتحسب احتمال النجاح بين 0 و 1 بمنحنى اسمه Sigmoid: نفس فكرة الخط، بس معدوس على طرفيه عشان ميطلعش بره الصفر والواحد.'),
+    L([
+      'الناتج احتمال: "الطالب ده احتمال نجاحه 0.82".',
+      'نختار عتبة (Threshold)، الافتراضية 0.5: فوقها ناجح، تحتها راسب.',
+      'العتبة قرار بيزنس مش رقم سحري: هنلعب فيها في المعمل وهنشوف إن تحريكها بيغير نوع الغلطات اللي الموديل بيعملها.'
+    ]),
+    P('مثال: من داتا الطلاب، اللي ذاكر 5 ساعات فأكتر نجح (درجته 68+) واللي أقل رسب. موديل Logistic بيتعلم إن عند 4.5 ساعة تقريباً الاحتمال نص نص، وكل ما تبعد عن النقطة دي ثقته بتزيد.'),
+    H('النقط اللي على الحد هي اللي بتوجع'),
+    P('طالب احتماله 0.51 وطالب احتماله 0.49: الاتنين عملياً شبه بعض، لكن واحد اتصنف ناجح والتاني راسب. ده طبيعي: أي عتبة لازم تعمل فاصل مكاني حاد. عشان كده لما تبني أو تقيم تصنيف، متبصش على الفئة النهائية بس، بص على الاحتمال نفسه: 0.51 و 0.95 مش نفس درجة الثقة.'),
+    H('أفكار تتاخد من غير تعمق'),
+    L([
+      'Decision Trees: سلسلة أسئلة نعم/لأ (ساعاته أكتر من 5؟) بتقسم الداتا لفئات. سهلة التفسير جداً للإدارة.',
+      'Random Forest: كذا شجرة بتصوت والأغلبية تكسب. أقوى وأثبت من شجرة واحدة.',
+      'فئات أكتر من اتنين (Multi-class): نفس الفكرة، الموديل بيوزع الاحتمالات على الفئات ويطلع الأعلى.'
+    ]),
+    N('جرب في المعمل: تجربة "عتبة القرار" فيها توزيعين (عملاء شالوا وعملاء جددوا) وعتبة بتحركها بإيدك، وبتشوف الـ Confusion Matrix والـ Accuracy بتتحسب لحظياً. هتفهم منها درس الـ Metrics الجاي قبل ما تقراه.')
+  ],
+  quiz:[
+    Q('ليه Logistic Regression أنسب من Linear Regression لتوقع ناجح/راسب؟',['لأنها أسرع','لأن ناتجها احتمال محصور بين 0 و 1 ومش بتتشد بسهولة من النقط البعيدة','لأنها مبتحتاجش داتا'],1,'الخط المستقيم بيطلع قيم بره النطاق [0,1] وبيحسس جداً للـ Outliers. الـ Sigmoid بيحصر الناتج كاحتمال حقيقي.'),
+    Q('موديل طلع احتمال نجاح طالب 0.82 والعتبة 0.5. التصنيف:',['راسب','ناجح','محتاج معلومات أكتر'],1,'0.82 أكبر من العتبة 0.5، يبقى التصنيف "ناجح" بثقة عالية نسبياً.'),
+    Q('طالبان احتمالاتهم 0.51 و 0.49 عند عتبة 0.5. إيه الصح؟',['واحد ناجح والتاني راسب رغم إنهم عملياً شبه بعض','الاتنين ناجح','الاتنين راسب'],0,'العتبة بتعمل فاصل حاد. نقطتين ملاصقتين للحد ممكن يتصنفوا مختلف تماماً، فبص دايماً على قيمة الاحتمال مش الفئة بس.'),
+    Q('Random Forest فكرته الأساسية:',['شجرة قرار واحدة كبيرة جداً','كذا Decision Tree بتتدرب على أجزاء مختلفة والتصويت بالأغلبية يحدد الناتج','خوارزمية Clustering'],1,'تجميع عدة أشجار بيقلل غلطات الشجرة الواحدة وبيحسن التعميم. من عائلة الـ Ensemble Methods.')
+  ],
+  exercises:[
+    X('جاوب من داتا درس 3: لو حولنا الدرجات لناجح (60+) وراسب، أنهي طلاب هيبقوا "على الحد" وموديل صعب يتأكد منهم؟','','اللي ذاكر 5 ساعات (70) و 6 ساعات (68) ناجحين بفارق مريح، واللي ذاكر 4 (63) كمان ناجح. الأصعب نظرياً اللي قرب حدود الـ 60: اللي ذاكر 3 (61) ناجح بشعرة، وده أول واحد ممكن موديل يتلخبط فيه.'),
+    X('بنك بيستخدم موديل يكتشف معاملات النصب. لو خفضوا العتبة من 0.5 لـ 0.3، إيه اللي هيحصل لعدد المعاملات المعلمة كنصب؟ ولسلام وصحة العملاء الشرفاء؟','','عتبة أقل = الموديل بيعلّم أسهل: هيلقط نصب أكتر (Recall أعلى) بس هيعلّم معاملات سليمة بالغلط أكتر (False Positives أعلى)، يعني عملاء شرفاء هيتضايقوا بمكالمات أو رفض معاملات. اختيار العتبة موازنة بين نوعين من الغلط.'),
+    X('افتح "عتبة القرار" في المعمل وحرك العتبة يمين وشمال. اكتب ملاحظة واحدة عن علاقة العتبة بالـ Accuracy','','ملاحظة متوقعة: فيه عتبة معينة بتدي أعلى Accuracy (حوالين تقاطع التوزيعين)، وأي إبعاد عنها بيزود غلطات. المهم تلاحظ إن الـ Accuracy وحدها مش بتقولك أنهي نوع غلط بيزيد: دي قصة الدرس الجاي.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'clustering',
+  nav:'Clustering بـ K-Means',
+  title:'الدرس 8: Clustering: K-Means يقسم الداتا لمجموعات',
+  subtitle:'تقسيم العملاء لشرائح من غير ما حد يقولك الشرائح إيه',
+  blocks:[
+    P('المرة دي مفيش Labels خالص. معاك بس داتا العملاء: كام مرة اشتروا وكام صرفوا، والمطلوب تكتشف الشرائح الطبيعية فيهم. دي مهمة Clustering، وأشهر خوارزمية فيها اسمها K-Means.'),
+    H('فكرة K-Means في 4 خطوات'),
+    L([
+      'اختار عدد المجموعات K (مثلاً 2).',
+      'حط K نقاط مركزية (Centroids) في أماكن عشوائية.',
+      'كرر: (أ) كل نقطة تتبع أقرب Centroid ليها، (ب) حرك كل Centroid لمتوسط نقاط مجموعته.',
+      'قف لما المراكز ميبقاش فيها حركة: كده المجموعات استقرت.'
+    ]),
+    P('مثال بإيدينا: 6 نقط: (1,2) و(2,1) و(1,1) من ناحية، و(8,9) و(9,8) و(8,8) من ناحية تانية. لو بدأنا بـ Centroids عند (1,2) و(8,8): أول جولة تخصيم هتدي النقط الصغيرة للأول والكبيرة للتاني، والمراكز الجديدة هتبقى (1.33, 1.33) و (8.33, 8.33). الجولة اللي بعدها مفيش نقطة هتغير مجموعتها، فالخوارزمية خلصت. جربها بنفسك في المعمل: تجربة "K-Means على نقراتك" بتخليك تنقط النقط وتشوف المراكز بتمشي خطوة خطوة.'),
+    H('أصعب سؤال: K تساوي كام؟'),
+    P('K-Means مش بيقرر عدد المجموعات، إنت اللي بتقرره. طريقة شائعة اسمها Elbow Method: جرب K من 1 لـ 10 واحسب مجموع تشتت النقط حوالين مراكزها (اسمه Inertia) لكل K. الرقم بينزل مع كل K زيادة، بس في نقطة الانخفاض بيبطأ فجأة ويعمل زاوية زي الكوع: دي غالباً الـ K المناسبة. وفي الآخر قرار بيزنس: 3 شرائح عملاء مفهومة أحسن من 8 شريحة عبقرية رياضياً ومحدش فاهمها.'),
+    H('خد بالك: المقياس بيحكم'),
+    P('K-Means بيقيس "قرب" بالمسافة الهندسية. لو عمود الدخل بالآلاف وعمود عدد الطلبات بأرقام صغيرة، المسافة هتتحسب بالدخل تقريباً لوحده وعمود الطلبات هيتجاهل. الحل: Feature Scaling (زي Standardization) قبل الـ Clustering، عشان كل عمود ياخد وزنه.'),
+    N('كـ Analyst هتستخدم K-Means كتير في التقسيم (Segmentation): شرائح عملاء، تجميع منتجات متشابهة البيع، اكتشاف أيام متشابهة في الترافيك. بس افتكر: النتيجة "مجموعات متشابهة" مش "حقائق": تفسير الشريحة واسمها ده شغلك إنت.'),
+    W('K-Means بيفترض مجموعات مدورة ومتقاربة الحجم. لو داتاك فيها مجموعات أشكالها غريبة (هلال مثلاً) أو كثافات مختلفة جداً، ممكن النتايج تضللك. بص على الرسم بعينك دايماً قبل ما تبني قرار على التقسيمة.')
+  ],
+  quiz:[
+    Q('خطوتي التكرار الأساسيتين في K-Means هما:',['تدريب واختبار','تخصيص كل نقطة لأقرب مركز، ثم تحريك المركز لمتوسط نقاطه','حذف الـ Outliers ثم الرسم'],1,'Assign ثم Update، ويتكرروا لحد ما المراكز تثبت. دي كل الخوارزمية.'),
+    Q('K-Means بيحتاج منك تحدد إيه قبل التشغيل؟',['الـ Labels','عدد المجموعات K','أسماء المجموعات'],1,'مفيش Labels أصلاً في Unsupervised. اللي بتحدده هو K، والخوارزمية بتكتشف مين في مين.'),
+    Q('في مثالنا، ليه الخوارزمية وقفت بعد جولة أو جولتين بسرعة؟',['لأن الداتا صغيرة فحصل خطأ','لأن لما المراكز ثبتت والتخصيص ماتغيرش مفيش حاجة جديدة تتعلم','لأن K كانت غلط'],1,'شرط الوقف هو ثبات التخصيص والمراكز. المجموعتين في مثالنا بعاد وواضحين فالاستقرار حصل فوراً.'),
+    Q('عمود الدخل بالآلاف وعمود عدد الطلبات أحادية الأرقام دخلوا K-Means من غير Scaling. المتوقع:',['التقسيمة هتعتمد على الدخل تقريباً لوحده','التقسيمة هتكون عادلة','K-Means هيعمل Scaling لوحده'],0,'المسافات بتتحسب بالأرقام الخام، فالعمود الكبير بيسيطر. لازم توحيد مقاييس (Scaling) قبل التشغيل.')
+  ],
+  exercises:[
+    X('احسب بنفسك: نقاط (2,2) و(4,2) في مجموعة، إيه الـ Centroid الجديد؟','','متوسط كل محور: ((2+4)/2, (2+2)/2) = (3,2). الـ Centroid هو متوسط إحداثيات نقاط مجموعته.'),
+    X('نقطة عند (5,5) والمراكز عند (3,2) و(8,8). لأنهي مركز هتتبع؟ احسب بالمسافة','','المسافة² لـ (3,2): (5-3)²+(5-2)²=4+9=13. لـ (8,8): (5-8)²+(5-8)²=9+9=18. هتتبع (3,2). (بنقارن المسافات المربعة مباشرة لأن الجذر مش بيغير الترتيب.)'),
+    X('افتح "K-Means على نقراتك" في المعمل: اعمل مجموعتين واضحتين من النقط (يمين وشمال) وشغل بـ K=2. جرب بعدين K=3 واكتب اللي حصل','','بـ K=2 الخوارزمية هتلاقي المجموعتين الطبيعيتين والمراكز هتستقر في نصهم. بـ K=3 هتقسم مجموعة منهم نصين: رياضياً صح (Inertia أقل) بس ممكن ميكونش له معنى في البيزنس. دي بالظبط مأساة اختيار K.'),
+    X('ليه الـ Inertia بينزل دايماً كل ما K تزيد؟ وإزاي الـ Elbow Method بتستغل ده؟','','كل مركز زيادة بيغطي نقط أقرب له، فمجموع التشتت بينزل لحد ما يوصل صفر لو K = عدد النقط. الـ Elbow بيدور على نقطة كسر المنحى: اللي بعدها الزيادة مش بتضيف تحسن يستاهل.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'metrics',
+  nav:'تقييم الموديل: Metrics',
+  title:'الدرس 9: Metrics: إزاي تقول "الموديل ده كويس" برقم؟',
+  subtitle:'Accuracy بتكدب أحياناً: القصة الكاملة للتقييم',
+  blocks:[
+    P('"الموديل ده كويس" جملة ملهاش معنى من غير رقم واضح على Test Set. بس الرقم المناسب بيختلف حسب نوع المشكلة وحسب تكلفة الغلطة. الدرس ده خريطة المقاييس اللي هتقابلها.'),
+    H('مقاييس Regression: قد إيه بنغلط في الرقم؟'),
+    L([
+      'MAE (Mean Absolute Error): متوسط القيمة المطلقة للغلطات. سهل التفسير: "بنغلط بمقدار 12 ألف في المتوسط".',
+      'RMSE (Root Mean Squared Error): جذر متوسط مربعات الغلطات. زي MAE بس بيعاقب الغلطات الكبيرة أضعاف.',
+      'مثال محسوب: غلطات 5 تنبؤات أسعار (-10 و +5 و -20 و +15 و +10): MAE = 12، و RMSE ≈ 13.04. لاحظ إن RMSE أكبر من MAE لأن غلطة الـ 20 اتعاقبت أكتر.'
+    ]),
+    H('مقاييس Classification: الـ Confusion Matrix أولاً'),
+    P('أي تصنيف Binary بيطلع 4 احتمالات: صح صح (TP)، غلط إيجابي (FP)، صح سلبي (TN)، غلط سلبي (FN). منهم بتتحسب كل المقاييس. مثال: موديل بيتوقع شيلينج العملاء على 20 عميل:'),
+    T(['','توقع: هيشيل','توقع: هيجدد'],[
+      ['الحقيقة: شال','TP = 5','FN = 2'],
+      ['الحقيقة: جدد','FP = 1','TN = 12']
+    ]),
+    L([
+      'Accuracy: (TP+TN)/الكل = 17/20 = 0.85. نسبة الصح عموماً.',
+      'Precision: لما الموديل قال "هيشيل"، كان صح قد إيه؟ 5/(5+1) ≈ 0.833.',
+      'Recall: من اللي شالوا فعلاً، لقطنا كام؟ 5/(5+2) ≈ 0.714.',
+      'F1 Score: متوسط موحد بين Precision و Recall = 10/13 ≈ 0.769. مفيد لما الداتا مش متوازنة.'
+    ]),
+    H('فخ الـ Accuracy'),
+    P('موديل كشف نصب على 1000 معاملة فيهم 10 نصب بس. موديل غبي بيقول "سليمة" على كل حاجة هيجيب Accuracy = 99%! وده مش بيلقط ولا نصاب. عشان كده في الداتا غير المتوازنة (Imbalanced) الـ Accuracy لوحدها مضللة: بص على Precision و Recall للفئة المهمة.'),
+    P('وأنهي أهم: Precision ولا Recall؟ على حسب تكلفة الغلطة: كشف السرطان؟ Recall أهم (متفوتش حالة). إيميلات سبام؟ Precision أهم (متوديش إيميل مهم في السبام). في المعمل جرب تحرك عتبة القرار وشوف الاتنين بيتبادلوا.'),
+    N('في Regression زي ما شوفنا في درس 6: قارن دايماً بخط الأساس (Baseline). موديل MSE بتاعه 2.3 مقابل 126.8 للتخمين بالمتوسط ده تقدم حقيقي. رقم كبير أو صغير ملهوش معنى لوحده.')
+  ],
+  quiz:[
+    Q('من الـ Confusion Matrix اللي فوق: الـ Precision تقريباً كام؟',['0.85','0.833','0.714'],1,'Precision = TP/(TP+FP) = 5/6 ≈ 0.833. الـ 0.85 هي الـ Accuracy و الـ 0.714 هي الـ Recall.'),
+    Q('موديل نصب قال "سليمة" على كل المعاملات وجاب Accuracy 99%. إيه المشكلة؟',['مفيش مشكلة، الرقم عالي','الفئة المهمة (النصب) نادرة فالـ Accuracy مضللة؛ لازم نبص على Recall بتاع النصب','الداتا كتير'],1,'مع 1% نصب، "كله سليم" بيدي 99% وهو بيلقط صفر نصاب. الـ Recall هنا = 0 وهو الرقم اللي يهم.'),
+    Q('الفرق الأساسي بين MAE و RMSE:',['RMSE بيعاقب الغلطات الكبيرة أضعاف بسبب التربيع','MAE أدق دايماً','مفيش فرق'],0,'التربيع في MSE/RMSE بيكبر وزن الغلطات الكبيرة. في مثالنا MAE = 12 و RMSE ≈ 13.04 بسبب غلطة الـ 20.'),
+    Q('أنهي غلطة أخطر في موديل كشف سرطان: False Positive ولا False Negative؟',['False Positive','False Negative','الاتنين زي بعض'],1,'False Negative يعني حالة حقيقية اتفوتت: أخطر بكتير من إنذار كاذب بيتصحح بفحص تاني. عشان كده Recall هو البطل هنا.')
+  ],
+  exercises:[
+    X('احسب Accuracy و Precision و Recall للحالة دي: TP=8 و FP=4 و TN=80 و FN=8 (من 100 عميل)','','Accuracy = 88/100 = 0.88. Precision = 8/12 ≈ 0.667. Recall = 8/16 = 0.5. لاحظ: Accuracy شكلها كويس (88%) بس الموديل بيلقط نص الحالات الموجبة بس!'),
+    X('متى تفضل Precision عالي على Recall؟ اذكر مثال واحد غير السبام','','لما الغلط الإيجابي غالي: نظام توصية بترقية عميل لباقة غالية (عميل غلط هيتضايق ويشيل)، أو إيقاف حساب مستخدم (إيقاف حساب بريء كارثة ثقة).'),
+    X('ارجع لدرس 6: غلطات خط الخمس طلاب كانت (0، 1.5، -2، -0.5، 1). احسب MAE و MSE و RMSE','','MAE = (0+1.5+2+0.5+1)/5 = 1.0. MSE = (0+2.25+4+0.25+1)/5 = 1.5. RMSE = √1.5 ≈ 1.22. كلها صغيرة لأن الخط قريب من النقط فعلاً.')
+  ]
+});
+
+</script>
+<script>
+/* ML From Zero — curriculum part 4: features, when-not, analyst path, sklearn, capstone */
+
+CURRICULUM.push({
+  id:'features',
+  nav:'التفكير في الـ Features',
+  title:'الدرس 10: Feature Thinking: سر الموديل في أعمدته',
+  subtitle:'نفس الخوارزمية بنفس الداتا ممكن تنجح أو تفشل حسب الأعمدة اللي صممتها',
+  blocks:[
+    P('فكرة هتغير نظرتك للمجال: أغلب تحسينات الموديلات في الشغل الحقيقي مش جايّة من خوارزميات أعقد، لكن من Features أذكى. تحويل الداتا الخام لأعمدة معبّرة ده اسمه Feature Engineering، وهو المكان اللي خبرتك كـ Analyst بتتفوق فيه على أي حد بيعرف خوارزميات ومش فاهم البيزنس.'),
+    H('من عمود خام لفكرة'),
+    L([
+      'تاريخ الطلب ← يوم الأسبوع، الشهر، هل هو ويكند، كام يوم من آخر طلب للعميل.',
+      'عدد الطلبات الكلي ← متوسط الطلبات في الشهر (عدد بيتأثر بعمر الحساب).',
+      'المرتب الخام ← المرتب مقارنة بمتوسط القسم (نسبة مش رقم مطلق).',
+      'إحداثيات المكان ← المسافة من أقرب فرع.'
+    ]),
+    P('لاحظ: كل تحويل من دول محتاج فهم للدومين. محدش يعرف إن "يوم الأسبوع" مهم في مبيعات محلك غير واحد شغال فيه. ده بالظبط سبب إن الـ Data Analyst ممكن يبقى أقوى حد يجهز Features.'),
+    H('أدواتك الحالية بتعمل Feature Engineering فعلاً'),
+    N('لو عملت عمود محسوب في Excel أو Power Query أو DAX بيحول داتا خام لمؤشر معبر، إنت عملت Feature Engineering من زمان من غير الاسم. الفرق بس إن العمود ده بقى مدخل لموديل بيتعلم بدل ما يبقى صف في تقرير.'),
+    H('قواعد أمان'),
+    L([
+      'متستخدمش Feature "من المستقبل": عمود بيتحسب بعد وقوع الحدث اللي بتتوقعه (زي "سبب الإلغاء" كـ Feature لتوقع "هل هيتلغى"). ده Leakage، والموديل هيبقى عبقري في التدريب وفاشل في الواقع.',
+      'Feature كويس = معلومة عن الـ Label: كل عمود داخل اسأل "هل ده فعلاً بيقول حاجة عن اللي بتوقعه؟" الرقم القومي للعميل مثلاً مالوش علاقة بولائه.',
+      'Features أقل وأوضح أحسن من كتير ومشوش: كل عمود زيادة هو باب Overfitting جديد وعمود لازم تحافظ عليه في الإنتاج.'
+    ]),
+    P('مثال شامل: توقع شيلينج عملاء شركة اتصالات. الأعمدة الخام (رقم العميل، تاريخ الاشتراك، المكالمات) ضعيفة. الأعمدة المصممة (عدد شكاوى آخر 3 شهور، نسبة انخفاض استهلاكه الشهر ده عن اللي فات، كام يوم من آخر تجديد) قوية: لأنها بتحكي قصة العميل مش تفاصيله الشكلية.')
+  ],
+  quiz:[
+    Q('إيه هو Feature Engineering؟',['شراء خوارزمية أغلى','تحويل الداتا الخام لأعمدة معبرة بتلقط العلاقة مع الهدف','تكبير حجم الملف'],1,'صياغة مدخلات الموديل بشكل يخلي العلاقة أوضح: أعمدة مشتقة من فهمك للبيزنس.'),
+    Q('أنهي Feature من دول Leakage لمشكلة توقع "هل العميل هيجدد اشتراكه"؟',['عدد شكاويه الشهور اللي فاتت','سبب عدم التجديد المكتوب بعد ما قرر','متوسط استهلاكه الشهري'],1,'سبب عدم التجديد بيتعرف بعد القرار نفسه: معلومة من المستقبل. الموديل هيبقى ممتاز في التدريب وفاشل في الواقع.'),
+    Q('ليه "متوسط الطلبات الشهري" غالباً أفضل من "إجمالي عدد الطلبات" كـ Feature؟',['لأنه أصغر في الحجم','لأن الإجمالي بيتأثر بعمر الحساب، فالمتوسط بيساوي بين عميل قديم وجديد','لأن المتوسطات أسرع في الحساب'],1,'عميل سنة كاملة عنده إجمالي أكبر من عميل أسبوعين حتى لو الجديد أنشط. التطبيع بيشيل التحيز الزمني.'),
+    Q('مين غالباً أحسن حد يصمم Features في شركة؟',['اللي بيعرف أكتر خوارزميات','اللي فاهم البيزنس والداتا (زي الـ Data Analyst)','الكمبيوتر لوحده دايماً'],1,'صياغة Features محتاجة معرفة بالدومين: إيه السلوك اللي بيسبق الشيلينج؟ ده علم بيزنس مش علم خوارزميات.')
+  ],
+  exercises:[
+    X('صمم 3 Features مشتقة لمشكلة توقع مبيعات يوم معين في سوبر ماركت','','أمثلة: يوم الأسبوع (الجمعة غير الثلاثاء)، هل اليوم قبل أجازة رسمية، متوسط مبيعات نفس اليوم آخر 4 أسابيع، درجة الحرارة المتوقعة. كلها معلومات معروفة قبل اليوم (مش Leakage).'),
+    X('عمود فيه تاريخ آخر شراء لكل عميل. استخرج منه Feature واحد قوي للشيلينج وسمّيه','','Recency: كام يوم من آخر شراء لحد النهارده. عميل مشترى من يومين غير اللي مشترى من 200 يوم. معادلة بسيطة بتعملها في SQL أو Excel: TODAY() - last_purchase_date.'),
+    X('راجع قايمة الأعمدة دي لتوقع درجة طالب وقول مين فيها مشكلة: ساعات المذاكرة، الحضور، اسم الطالب، درجات امتحانات سابقة','','اسم الطالب: مفيش معلومة عامة عن الدرجة فيه (وبيعمل عمود فريد لكل صف يعني حفظ مثالي = Overfitting). الباقي Features منطقية. ملاحظة: درجات سابقة Feature قوي فعلاً لأنها بتقيس المستوى المتراكم.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'notml',
+  nav:'إمتى متستخدمش ML',
+  title:'الدرس 11: إمتى متستخدمش Machine Learning؟',
+  subtitle:'أحياناً أذكى قرار هندسي هو... SELECT بسيطة',
+  blocks:[
+    P('أهم درس في الكورس كله ممكن يكون ده. ML مبهر، بس في الشغل الحقيقي كل مشروع ليه تكلفة: داتا، وقت، صيانة، ومسؤولية لو الموديل غلط. المحترف بيعرف إمتى الأدوات البسيطة أحسن.'),
+    H('علامات إن المشكلة مش محتاجة ML'),
+    L([
+      'القاعدة واضحة ومكتوبة: "الطلبات فوق 100 ألف محتاجة موافقة مدير"؟ دي IF، مش موديل. القواعد المكتوبة أوضح وأسهل في التعديل والمراجعة.',
+      'مفيش داتا كفاية: عندك 30 مثال بس؟ الموديل مش هيتعلم حاجة تستاهل. اعمل تحليل وصفي واجمع داتا الأول.',
+      'المطلوب إجابة عن الماضي: "مبيعات الربع الأول؟" دي SQL GROUP BY مش تنبؤ.',
+      'خطأ الموديل غير مقبول وغير قابل للمراجعة: قرارات طبية أو قانونية فاصلة محتاجة قواعد شفافة وقابلة للتدقيق.'
+    ]),
+    H('تكاليف مش باينة'),
+    P('الموديل مش "خلص لما يتدرب". ده كائن حي: الداتا بتتغير مع الزمن (اسمها Data Drift) والأداء بيهبط، فمحتاج مراقبة وإعادة تدريب. محتاج يتشرح للإدارة ("ليه رفضنا العميل ده؟"). ومحتاج واحد مسؤول عن غلطاته. لو الفايدة صغيرة، التكاليف دي بتكسب.'),
+    N('قاعدة عملية: لو تقدر تحلها بـ IF واضحة أو Pivot Table ونتيجة كويسة، اعمل كده. اعتبر ML مكسب لما القاعدة معقدة ومش مكتوبة: تصنيف نصوص، توقع فيه عشرات العوامل، اكتشاف أنماط مش باينة.'),
+    H('المسار الصح للقرار'),
+    L([
+      'ابدأ بالبسيط: قاعدة مكتوبة أو متوسطات. قيس أداءها: ده الـ Baseline.',
+      'لو البسيط مش كفاية وفيه داتا كفاية ومعقولة: جرب موديل بسيط (Linear/Logistic).',
+      'قارن مع الـ Baseline على Test Set. الموديل مكسبش بفرق واضح؟ يبقى البسيط هو الحل.',
+      'كسب؟ اسأل عن الصيانة والشرح قبل ما تبني عليه قراراً.'
+    ])
+  ],
+  quiz:[
+    Q('"أي فاتورة فوق 50 ألف لازم تتعطل للمراجعة". أنسب حل:',['موديل Classification','قاعدة IF مكتوبة','K-Means'],1,'القاعدة معروفة ومحددة مسبقاً من البيزنس: مفيش حاجة تتعلم من الداتا. قاعدة مكتوبة أوضح وأسهل في المراجعة والتعديل.'),
+    Q('عندك 25 مثال بس من الماضي لمشكلة تنبؤ. التصرف الأنضج:',['تدريب Neural Network كبير','تحليل وصفي بسيط وجمع داتا أكتر قبل التفكير في ML','تجاهل المشكلة'],1,'25 مثال قليلين جداً لأي تعميم موثوق. الموديل هيحفظهم وهيفشل في الواقع. اجمع داتا وارجع.'),
+    Q('"إيه كانت أعلى 5 منتجات مبيعاً الشهر اللي فات؟" ده سؤال:',['يحتاج ML','يتحل بـ SQL / Pivot Table عادية','يحتاج Neural Network'],1,'سؤال عن الماضي المسجل: جمع وترتيب وفلترة. مفيش تنبؤ ولا استنتاج قاعدة من أمثلة.'),
+    Q('ليه موديل اتدرب من سنتين أداؤه بيهبط مع الوقت؟',['الخوارزمية بتنسى','Data Drift: سلوك العالم اتغير والداتا القديمة بطلت تمثله','لأن الموديلات عمرها سنتين بالظبط'],1,'العالم بيتغير (أسعار، سلوك عملاء، موسمية جديدة) فالقاعدة اللي اتعلمت من الماضي بتقضل. عشان كده الموديل محتاج مراقبة وإعادة تدريب.')
+  ],
+  exercises:[
+    X('صنّف: محتاج ML ولا قاعدة بسيطة؟ (1) رفض أي تحويل فوق مليون جنيه، (2) توقع اللي هيتصل يلغي اشتراكه من 40 سلوك مختلف، (3) إجمالي مبيعات كل منطقة','','(1) قاعدة مكتوبة. (2) ML: تفاعل عوامل كتير ومش فيه قاعدة واضحة بإيد بشر. (3) SQL GROUP BY. الاختبار: القاعدة معروفة ومحدودة؟ قاعدة. العلاقة معقدة ومخفية في الداتا؟ ML.'),
+    X('ليه "شرح القرار" نقطة ضد ML أحياناً؟ اذكر مثال','','جهات رقابية أو عميل ممكن يطالبوا بسبب قرار: "ليه اترفض طلب القرض؟" قاعدة مكتوبة تتشرح في سطر، موديل معقد محتاج مجهود تفسير إضافي (وفيه موديلات أسهل في التفسير زي Decision Trees).'),
+    X('مشروع عندك فيه Baseline بسيط (متوسط المبيعات الشهرية) جاب RMSE = 8، وموديل ML جاب RMSE = 7.6 بس محتاج صيانة شهرية. القرار؟','','تحسن 5% بس مقابل تكلفة صيانة ومراقبة مستمرة وشرح أصعب. غالباً البسيط أحسن هنا إلا لو الـ 0.4 فرقهم مادياً كبير (مبيعات بملايين). القرار بيزنس مش رياضيات بس.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'analyst',
+  nav:'ML في شغل الـ Data Analyst',
+  title:'الدرس 12: ML في مسارك كـ Data Analyst',
+  subtitle:'إزاي الدرس ده بيكمل SQL و Python و Excel و Power BI',
+  blocks:[
+    P('لو خلصت أكاديميات SQL و Python و Excel و Power BI، إنت عندك سلسلة كاملة: سحب الداتا، تنضيفها، تحليلها، وعرضها. ML مش بديل عنهم: ML حلقة جديدة في نفس السلسلة، بتاكل من نفس الداتا وبترجع نتايجها لنفس الأدوات.'),
+    H('شكل المشروع الواقعي'),
+    L([
+      'SQL: سحب داتا التدريب من قاعدة البيانات (نفس الجداول والـ Joins بتاعتك).',
+      'Python (Pandas): تنضيف وبناء الـ Features (نفس شغل الـ DataFrames).',
+      'scikit-learn: تدريب وتقييم الموديل (كذا سطر بس، هنشوفه الدرس الجاي).',
+      'Power BI أو Excel: عرض التوقعات والمقاييس في داشبورد للإدارة.'
+    ]),
+    P('لاحظ: 80% من الوقت في الأدوات اللي تعرفها أصلاً (سحب وتنضيف وتصميم Features). الـ ML نفسه 20%. عشان كده الـ Analyst اللي فاهم ML مرغوب جداً: هو أصلاً ماسك أصعب جزء.'),
+    H('إيه اللي تقدر تعمله بكرة في شغلك'),
+    L([
+      'تقسيم العملاء لشرائح بـ K-Means بدل التقسيم اليدوي، وعرض الشرائح في Power BI.',
+      'توقع مبيعات الشهر الجاي بـ Regression بسيطة على بياناتك التاريخية، ومقارنتها بالفعلي.',
+      'ترتيب قائمة العملاء المعرضين للشيلينج باحتمالات، عشان فريق المبيعات يبدأ بالأخطر.',
+      'قراءة تقارير فرق الـ ML بعين ناقدة: تسأل عن الـ Test Set والـ Baseline والـ Leakage زي محترف.'
+    ]),
+    H('كلمات هتسمعها في الاجتماعات'),
+    L([
+      'Production: الموديل شغال فعلاً وبيتستخدم في قرارات، مش مجرد تجربة.',
+      'Inference: استخدام الموديل المدرب للتوقع على صف جديد (عكس Training).',
+      'Pipeline: سلسلة الخطوات المؤتمتة من الداتا الخام للتوقع النهائي.',
+      'A/B Test: مقارنة نسختين في الواقع (مش ML بس بتقابلها جنبه كتير).'
+    ]),
+    N('النصيحة الأهم: متستناش "مشروع ML رسمي" عشان تبدأ. خد أبسط مشكلة تنبؤ في شغلك، اعملها بأبسط موديل، وقارن بالـ Baseline. أول مشروع صغير شغال بيعلمك أكتر من 10 كورسات نظرية.')
+  ],
+  quiz:[
+    Q('في مشروع ML واقعي، أنهي خطوة بتاخد أكبر وقت عادة؟',['اختيار اسم الموديل','سحب وتنضيف الداتا وبناء الـ Features','كتابة سطور التدريب'],1,'القاعدة المشهورة: حوالي 80% من المجهود داتا (سحب، تنضيف، Features) و20% النمذجة نفسها. ودي نقطتك القوية كـ Analyst.'),
+    Q('إيه علاقة Power BI بمشروع ML؟',['مفيش علاقة','عرض التوقعات والمقاييس للإدارة في داشبورد بعد ما الموديل يطلعها','Power BI بيدرب الموديلات'],1,'الأدوات بتتكامل: الموديل بيطلع توقعات، والـ BI بينقلها للناس بشكل يتفهم. داتا في، قرار طالع.'),
+    Q('إيه هو Inference؟',['تدريب الموديل من الأول','استخدام موديل مدرب للتوقع على داتا جديدة','تنضيف الداتا'],1,'Training مرة (أو دورياً)، Inference كل مرة نحتاج توقع. زي ما تتعلم قاعدة وبعدين تستخدمها.'),
+    Q('ليه الـ Analyst الفاهم ML مرغوب أكتر من الاتنين منفصلين؟',['لأنه بيعرف برمجة أكتر','لأن أصعب جزء في مشاريع ML (الداتا والـ Features) هو شغله الأصلي، فبيوصل الفني بالبيزنس','مفيش فرق'],1,'اللي بيفهم الداتا والبيزنس ويتكلم لغة الموديلات بيترجم بين الفريقين وبيمنع كوارث زي الـ Leakage قبل ما تحصل.')
+  ],
+  exercises:[
+    X('ارسم خطوات مشروع "توقع مبيعات الشهر الجاي" من أول قاعدة البيانات لحد الإدارة تشوف النتيجة','','SQL لسحب المبيعات التاريخية، Python/Pandas لتجهيز Features (الشهر، الموسم، متوسط آخر 3 شهور)، scikit-learn لتدريب Regression وتقييمها على أحدث شهور (تقسيم زمني)، وأخيراً Power BI لعرض التوقع جنب الفعلي مع مقياس الغلط.'),
+    X('زميلك في فريق ML بيقول "الموديل جاب 97%". اكتب 3 أسئلة ناقدة تسألها قبل ما تصدق','','97% على Test Set ولا Training؟ إيه الـ Baseline اللي بنقارن بيه (ممكن 95% بقاعدة بسيطة)؟ الداتا متوازنة ولا فيها فئة نادرة (فخ Accuracy)؟ فيه احتمال Leakage في الـ Features؟'),
+    X('اقترح أول مشروع ML صغير في شغلك أو دراستك: المشكلة، الداتا، الـ Baseline','','مثال: توقع درجاتي في المادة الجاية من ساعات المذاكرة الأسبوعية (Regression بسيط، Baseline = متوسط درجاتي). أو تقسيم مصاريفي الشهرية لمجموعات بـ K-Means (Baseline = تصنيفي اليدوي الحالي).')
+  ]
+});
+
+CURRICULUM.push({
+  id:'sklearn',
+  nav:'الشغل الحقيقي بـ scikit-learn',
+  title:'الدرس 13: شكل الكود الحقيقي: Python و scikit-learn',
+  subtitle:'كل اللي فات في 10 سطور كود',
+  blocks:[
+    P('طول الكورس بنتكلم مفاهيم. الدرس ده يوريك إن التطبيق في Python أبسط بكتير مما تتخيل: مكتبة اسمها scikit-learn (بتتكتب `sklearn`) فيها كل الموديلات اللي اتكلمنا عنها بواجهة واحدة ثابتة: `fit` للتدريب و `predict` للتوقع.'),
+    H('مثال كامل: Linear Regression على داتا الطلاب'),
+    C(`import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+
+df = pd.read_csv('students.csv')      # عمودين: hours_studied, final_score
+X = df[['hours_studied']]             # Features (لاحظ: جدول بعمود)
+y = df['final_score']                 # Label
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)
+
+model = LinearRegression()
+model.fit(X_train, y_train)           # التدريب: سطر واحد
+preds = model.predict(X_test)         # التوقع على المخفي
+print(mean_absolute_error(y_test, preds))`),
+    P('قراءة سريعة: بنقرا الـ CSV بـ Pandas، بنفصل الـ Features عن الـ Label، بنقسم Train/Test (80/20 مع تثبيت العشوائية)، بنعمل الموديل وندربه بـ fit ونتوقع بـ predict ونقيس بـ MAE. لو دربت على الداتا كلها بدون تقسيم هيطلع slope = 3.88 و intercept = 47.93: نفس أرقام المعمل بالظبط، لأنها نفس الرياضيات.'),
+    H('تبديل الموديل = تبديل سطر'),
+    C(`from sklearn.linear_model import LogisticRegression   # تصنيف فئتين
+from sklearn.ensemble import RandomForestClassifier          # أشجار بتصوت
+from sklearn.cluster import KMeans                            # تجميع (مش محتاج y)
+
+model = KMeans(n_clusters=3)
+labels = model.fit_predict(X)   # Unsupervised: مفيش y أصلاً`),
+    P('دي أجمل نقطة في scikit-learn: الواجهة موحدة. اتعلمت fit/predict مرة، بتشتغل على عشرات الموديلات. KMeans بس مش بياخد y لأنه Unsupervised: مفيش إجابات يتعلم منها، هو بيكتشف.'),
+    H('ليه مش هنكتب خوارزميات بإيدنا؟'),
+    P('في المعمل كتبنا K-Means و Least Squares بـ JavaScript خام عشان تفهم الميكانيكا. في الشغل الحقيقي محدش بيكتبها من الصفر: مكتبات زي sklearn متجربة ومحسوبة صح وسريعة. قيمتك مش في كتابة الخوارزمية، قيمتك في تجهيز الداتا الصح واختيار المشكلة الصح وتقييم النتيجة الصح.'),
+    N('عايز تجرب الكود ده فعلاً من غير تنصيب؟ افتح Google Colab (مجاني، بيشتغل في المتصفح)، والصق الكود مع ملف students.csv. أو طبق نفس الفكرة في معمل Python بتاع أكاديمية Python من الصفر.')
+  ],
+  quiz:[
+    Q('إيه وظيفة `model.fit(X_train, y_train)`؟',['التوقع على داتا جديدة','تدريب الموديل على بيانات التدريب','حفظ الموديل في ملف'],1,'fit = تعلم العلاقة من أمثلة التدريب. predict بعدها بيستخدم اللي اتعلمه على صفوف جديدة.'),
+    Q('ليه KMeans بيتنادى `fit_predict(X)` من غير y؟',['خطأ في الكود','لأنه Unsupervised: مفيش Labels يتعلم منها، هو بيكتشف المجموعات','لأنه أسرع كده'],1,'Clustering مش بيحتاج إجابات صح. بياخد الـ Features بس ويرجع رقم المجموعة لكل صف.'),
+    Q('random_state=42 في train_test_split بتعمل إيه؟',['بتخلي التقسيم أسرع','بتثبت العشوائية عشان نفس التقسيمة تتكرر في كل تشغيل','بتحدد عدد الصفوف'],1,'التقسيم عشوائي، و random_state بذرة العشوائية: ثبتها تتكرر نفس النتايج، مهم لتجارب قابلة للمراجعة.'),
+    Q('ليه اتفقنا إننا منكتبش الخوارزمية بإيدنا في الشغل الحقيقي؟',['عشان الكسل','لأن المكتبات مجربة وصح وسريعة، وقيمتك في الداتا والمشكلة والتقييم مش في إعادة اختراع الرياضيات','لأن الرياضيات مش مهمة'],1,'الفهم ضروري (عشان كده عملناها بالإيد في المعمل)، بس التنفيذ الإنتاجي للمكتبات المجربة.')
+  ],
+  exercises:[
+    X('عدّل كود الدرس ليعمل Classification: يتوقع ناجح (درجة 60+) من ساعات المذاكرة. اكتب الأسطر اللي هتتغير','','y = (df[\'final_score\'] >= 60).astype(int) لتحويل الهدف لفئة 0/1، و model = LogisticRegression() بدل LinearRegression، وتقييم بـ accuracy_score أو precision/recall بدل MAE.'),
+    X('ليه X = df[[\'hours_studied\']] بقوسين مربعين مش قوس واحد؟','','القوس الواحد بيرجع Series (عمود)، والاتنين بيرجعوا DataFrame (جدول بعمود). sklearn بتتوقع X كجدول (صفوف × أعمدة) حتى لو عمود واحد، و y كـ Series.'),
+    X('نفذ الكود في Colab على داتا الطلاب العشرة وسجل: slope و intercept اللي طلعوا، وقارنهم بأرقام المعمل','','هتطلع coef_ ≈ 3.88 و intercept_ ≈ 47.93 (لو دربت على الداتا كلها)، مطابقين لأرقام المعمل و Least Squares المحسوبة بإيدنا. لو قسمت 80/20 هتطلع أرقام قريبة بس مش مظبوطة لأن التدريب على 8 نقاط بس.')
+  ]
+});
+
+CURRICULUM.push({
+  id:'capstone',
+  nav:'🏆 المشروع النهائي',
+  title:'الدرس 14: المشروع النهائي: رحلة كاملة من CSV لتنبؤ',
+  subtitle:'كل اللي اتعلمته في مشروع واحد صغير: من أول السؤال لحد الحكم على النتيجة',
+  blocks:[
+    P('وصلنا للمشروع. هنمشي كل الخطوات اللي اتعلمناها على سؤال واحد: "هل نقدر نتوقع درجة طالب في الامتحان النهائي من ساعات مذاكرته؟" هنستخدم داتا الطلاب العشرة بتاعتنا، ونمشي بنفس ترتيب الشغل الحقيقي.'),
+    H('الخطوة 1: السؤال والداتا'),
+    P('السؤال تنبؤ رقمي (درجة) بإجابات متاحة من الماضي: Supervised Regression. الداتا: 10 صفوف، Feature واحد (hours_studied) و Label واحد (final_score). صغيرة بس مثالية للتعلم: كل حساب تقدر تتحقق منه بإيدك.'),
+    H('الخطوة 2: التقسيم (زي الشغل الحقيقي)'),
+    P('هنخبي آخر صفين (9 ساعات و 10 ساعات) كـ Test Set، ونتدرب على أول 8 بس. (في الواقع بنقسم عشوائياً، بس هنا بنحاكي إن الطالبين الجدد "لسه جايين".)'),
+    H('الخطوة 3: التدريب'),
+    P('Linear Regression على الـ 8 صفوف طلعت: `score = 48.54 + 3.71 × hours`. (لاحظ: مختلفة شوية عن خط العشرة كلهم `47.93 + 3.88×`، وده طبيعي: كل ما الداتا تتغير الخط بيتغير.)'),
+    H('الخطوة 4: التقييم على المخفي'),
+    T(['hours','التوقع','الحقيقة','الغلط'],[
+      ['9','81.96','83','-1.04'],
+      ['10','85.68','88','-2.32']
+    ]),
+    P('Test MAE = 1.68 درجة في المتوسط. مقارنة بـ Baseline بتاع "توقع متوسط درجات التدريب (65.25) لكل حد": غلطه هيبقى 17.75 و 22.75 درجة (MAE = 20.25). الموديل كسب الـ Baseline بفرق ضخم: نقدر نقول فعلاً "فيه علاقة اتعلمت"، مش بنهزر.'),
+    H('الخطوة 5: الحكم والقرار'),
+    L([
+      'النتيجة مفيدة: غلط ~1.7 درجة على طلاب جدد من 8 أمثلة بس حاجة محترمة.',
+      'الحدود واضحة: 10 صفوف و Feature واحد. مينفعش نعمم على امتحانات تانية أو مواد تانية.',
+      'الخطوة الجاية لو ده شغل حقيقي: نجمع داتا أكتر (مئات الطلاب) ونضيف Features (حضور، نوم، درجات سابقة) ونقارن بموديلات تانية.'
+    ]),
+    H('الخطوة 6: الكود الكامل'),
+    C(`import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+
+df = pd.read_csv('students.csv')
+train, test = df.iloc[:8], df.iloc[8:]     # تدريب على 8 واختبار على 2
+
+model = LinearRegression().fit(train[['hours_studied']], train['final_score'])
+preds = model.predict(test[['hours_studied']])
+
+print(model.coef_, model.intercept_)       # 3.71 و 48.54 تقريباً
+print(mean_absolute_error(test['final_score'], preds))   # 1.68`),
+    H('تسليمك النهائي'),
+    P('اعمل المشروع ده على داتا من اختيارك: ملف CSV صغير (حتى لو عملته بإيدك)، سؤال تنبؤ واضح، تقسيم Train/Test، تدريب Linear Regression في Colab، تقييم MAE أو RMSE مقابل Baseline، وفقرة صغيرة تكتب فيها حكمك: الموديل نافع ولا لأ وليه. ارفعه على GitHub جنب مشاريع الأكاديميات التانية. ده مشروع صغير بس كامل: وده اللي بيفرق في الإنترفيو.'),
+    N('مبروك إنهاء رحلة ML من الصفر! إنت دلوقتي فاهم الصورة: إيه هو ML، أنواعه، إزاي بيتدرب ويتقيم، وإمتى يتستخدم وإمتى لأ. الخطوة الجاية الطبيعية: تعمق في Python و scikit-learn، وبعدين موديلات أكبر لما تحتاجها فعلاً.')
+  ],
+  quiz:[
+    Q('ليه قسمنا الداتا 8 تدريب و 2 اختبار بدل التدريب على العشرة كلهم؟',['عشان نوفر وقت','عشان نقيس على داتا الموديل ما شفهاش: ده التقييم الحقيقي الوحيد','عشان الكود يبقى أقصر'],1,'التدريب على الكل كان هيدينا رقم متفائل على أمثلة محفوظة. الصفين المخبيين هم المحك.'),
+    Q('الموديل جاب Test MAE = 1.68 والـ Baseline جاب MAE = 20.25. الاستنتاج الصح:',['الموديل ممتاز مطلقاً','الموديل تعلم علاقة حقيقية أقوى بكتير من التخمين بالمتوسط','الـ Baseline غلط'],1,'المقارنة بالـ Baseline هي اللي بتدي الرقم معنى: 1.68 مش كبير ولا صغير لوحده، هو أحسن 11 مرة من التخمين البليد.'),
+    Q('خط التدريب على 8 صفوف (48.54 + 3.71x) مختلف عن خط العشرة (47.93 + 3.88x). ده معناه:',['فيه خطأ في الحساب','المعاملات بتعتمد على بيانات التدريب: غير الداتا يتغير الخط','Linear Regression مش ثابتة'],1,'الموديل بيتعلم من اللي بيشوفه. صفين زيادة غيروا المعاملات شوية، وده طبيعي ومتوقع.'),
+    Q('أهم حدود المشروع ده قبل ما نبني عليه قرارات حقيقية:',['الكود طويل','حجم الداتا صغير جداً و Feature واحد بس: النتايج مشجعة بس مش قابلة للتعميم','الرياضيات صعبة'],1,'10 صفوف مثال تعليمي ممتاز بس مش أساس قرار. الحل واضح: داتا أكتر و Features أعمق.')
+  ],
+  exercises:[
+    X('نفذ المشروع كله في Colab على داتا الطلاب وقارن أرقامك بأرقام الدرس (3.71 و 48.54 و MAE 1.68)','','لو طلعت أرقام مختلفة راجع: تقسيمة أول 8 وآخر 2 (مش عشوائية)، وإن X جدول بقوسين. الأرقام دي محسوبة بنفس الطريقة فلازم تطابق.'),
+    X('احسب Baseline "توقع المتوسط" بنفسك: متوسط درجات أول 8 طلاب، وغلطاته على الصفين الأخيرين','','متوسط أول 8: (52+55+61+63+70+68+74+79)/8 = 522/8 = 65.25. غلطه على طالب 9 ساعات: |65.25-83| = 17.75، وعلى طالب 10 ساعات: |65.25-88| = 22.75. يبقى MAE = (17.75+22.75)/2 = 20.25، مقابل 1.68 للموديل: الموديل أدق 12 مرة من التخمين بالمتوسط.'),
+    X('مشروعك الشخصي: اكتب في فقرة قصيرة خطة مشروعك (السؤال، الداتا، الـ Baseline، مقياس النجاح) قبل ما تلمس الكود','','الخطة الكويسة ليها 4 عناصر: سؤال تنبؤ محدد، داتا فيها إجابات ماضية كفاية، Baseline بسيط للمقارنة، ومقياس نجاح واضح (MAE أو Recall حسب المشكلة). الكود آخر خطوة مش أولها.')
+  ]
+});
+
+</script>
+<script>
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'ml-zero-progress-v1';
+
+  function loadProgress() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var p = JSON.parse(raw);
+        if (p && typeof p === 'object') {
+          p.answers = p.answers || {};
+          p.done = p.done || {};
+          return p;
+        }
+      }
+    } catch (e) { /* corrupted storage -> start fresh */ }
+    return { answers: {}, done: {} };
+  }
+
+  function saveProgress() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
+  }
+
+  var progress = loadProgress();
+
+  /* ---------- helpers ---------- */
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /* small Python-ish highlighter: strings, keywords, numbers */
+  var XLFNS = ['import','from','def','return','for','while','if','else','elif','in','not','and','or','print','class','True','False','None','with','as','try','except','lambda','range','len','fit','predict','fit_predict'];
+  var HL_RE = new RegExp(
+    '("(?:[^"]|"")*")' +
+    '|(\\b(?:' + XLFNS.join('|') + ')\\b)(?=\\s*\\(|\\s+[A-Za-z]|\\s*$)' +
+    '|((?:\'[^\']+\'|[A-Za-z_][A-Za-z_0-9]*)?\\[[^\\]]+\\])' +
+    '|(\\b\\d+(?:\\.\\d+)?\\b)', 'g');
+
+  function highlight(code) {
+    var out = esc(code).replace(HL_RE, function (m, s, f, r, n) {
+      if (s) return '<span class="s">' + s + '</span>';
+      if (f) return '<span class="k">' + f + '</span>';
+      if (r) return '<span class="k">' + r + '</span>';
+      if (n) return '<span class="n">' + n + '</span>';
+      return m;
+    });
+    return '<pre><code>' + out + '</code></pre>';
+  }
+
+  function renderInline(text) {
+    /* `code` spans inside normal text */
+    return esc(text).replace(/`([^`]+)`/g, function (_, c) {
+      return '<span class="kw">' + c + '</span>';
+    });
+  }
+
+  /* ---------- progress ---------- */
+  function totalLessons() { return CURRICULUM.length; }
+  function doneCount() {
+    var n = 0;
+    CURRICULUM.forEach(function (l) { if (progress.done[l.id]) n++; });
+    return n;
+  }
+
+  function refreshProgressUI() {
+    var pct = totalLessons() ? Math.round(doneCount() / totalLessons() * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = pct + '%';
+    CURRICULUM.forEach(function (l) {
+      var el = document.querySelector('.nav-item[data-id="' + l.id + '"]');
+      if (el) { el.classList.toggle('done', !!progress.done[l.id]); el.querySelector('.check').textContent=progress.done[l.id]?'✓':''; }
+    });
+  }
+
+  /* ---------- nav ---------- */
+  function buildNav() {
+    var nav = document.getElementById('nav');
+    nav.innerHTML = '';
+    CURRICULUM.forEach(function (l, idx) {
+      var item = document.createElement('button');
+      item.type='button';
+      item.className = 'nav-item';
+      item.dataset.id = l.id;
+      item.innerHTML = '<span class="check">' + (progress.done[l.id] ? '✓' : '') + '</span>' +
+        '<span class="num">' + (idx + 1) + '</span><span>' + esc(l.nav) + '</span>';
+      item.addEventListener('click', function () {
+        openLesson(l.id);
+        document.getElementById('sidebar').classList.remove('open');
+      });
+      nav.appendChild(item);
+    });
+  }
+
+  /* ---------- lesson rendering ---------- */
+  function renderBlocks(blocks) {
+    var html = '';
+    blocks.forEach(function (b) {
+      if (b.type === 'p') html += '<p>' + renderInline(b.text) + '</p>';
+      else if (b.type === 'h') html += '<h3>' + esc(b.text) + '</h3>';
+      else if (b.type === 'code') html += highlight(b.code);
+      else if (b.type === 'note') html += '<div class="note' + (b.warn ? ' warn' : '') + '">' + renderInline(b.text) + '</div>';
+      else if (b.type === 'list') {
+        html += '<ul>' + b.items.map(function (i) { return '<li>' + renderInline(i) + '</li>'; }).join('') + '</ul>';
+      } else if (b.type === 'table') {
+        html += '<table class="demo"><tr>' + b.head.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr>' +
+          b.rows.map(function (r) { return '<tr>' + r.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join('') + '</tr>'; }).join('') +
+          '</table>';
+      }
+    });
+    return html;
+  }
+
+  var currentLesson = null;
+
+  function openLesson(id) {
+    var lesson = null, idx = -1;
+    CURRICULUM.forEach(function (l, i) { if (l.id === id) { lesson = l; idx = i; } });
+    if (!lesson) return;
+    currentLesson = lesson;
+    document.getElementById('lab').hidden = true;
+    document.getElementById('lesson').style.display = 'block';
+    progress.lastLesson = id; saveProgress();
+
+    document.getElementById('hero').style.display = 'none';
+    var host = document.getElementById('lesson');
+
+    var html = '<div class="lesson">';
+    html += '<h2 class="lesson-title">' + esc(lesson.title) + '</h2>';
+    html += '<div class="lesson-sub">' + esc(lesson.subtitle) + '</div>';
+    html += renderBlocks(lesson.blocks);
+    html += '<div class="quiz-box" id="quiz-box"><h3>🧠 اختبر نفسك</h3><div id="quiz-qs"></div><div class="quiz-result" id="quiz-result"></div></div>';
+    html += '<div class="exercise-box"><h3>✍️ تمارين عملية</h3><div id="exs"></div></div>';
+    html += '<div class="complete-badge" id="complete-badge">🎉 مبروك! خلصت الدرس ده. كمل اللي بعده 👇</div>';
+    html += '<div class="lesson-nav">';
+    html += '<button id="prev-btn"' + (idx === 0 ? ' disabled' : '') + '>→ الدرس اللي فات</button>';
+    html += '<button id="next-btn" class="next-btn"' + (idx === CURRICULUM.length - 1 ? ' disabled' : '') + '>الدرس اللي بعده ←</button>';
+    html += '</div></div>';
+
+    host.innerHTML = html;
+
+    buildQuiz(lesson);
+    buildExercises(lesson);
+
+    document.getElementById('prev-btn').addEventListener('click', function () {
+      if (idx > 0) openLesson(CURRICULUM[idx - 1].id);
+    });
+    document.getElementById('next-btn').addEventListener('click', function () {
+      if (idx < CURRICULUM.length - 1) openLesson(CURRICULUM[idx + 1].id);
+    });
+
+    document.querySelectorAll('.nav-item').forEach(function (n) {
+      n.classList.toggle('active', n.dataset.id === id);
+    });
+    refreshProgressUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ---------- quiz ---------- */
+  function buildQuiz(lesson) {
+    var qsHost = document.getElementById('quiz-qs');
+    lesson.quiz.forEach(function (q, qi) {
+      var box = document.createElement('div');
+      box.className = 'quiz-q';
+      var qid = lesson.id + ':' + qi;
+
+      var qhtml = '<div class="q-text">' + (qi + 1) + '. ' + renderInline(q.q) + '</div>';
+      if (q.code) qhtml += highlight(q.code);
+      box.innerHTML = qhtml;
+
+      var answered = progress.answers[qid];
+      var fb = document.createElement('div');
+      fb.className = 'feedback';
+
+      q.options.forEach(function (opt, oi) {
+        var btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.innerHTML = opt.mono ? '<span class="mono">' + esc(opt.text) + '</span>' : renderInline(opt.text);
+        btn.addEventListener('click', function () {
+          if (progress.answers[qid] !== undefined) return;
+          var correct = (oi === q.answer);
+          progress.answers[qid] = { picked: oi, correct: correct };
+          saveProgress();
+          paint();
+          checkQuizDone(lesson);
+        });
+        box.appendChild(btn);
+      });
+      box.appendChild(fb);
+      qsHost.appendChild(box);
+
+      function paint() {
+        var rec = progress.answers[qid];
+        var btns = box.querySelectorAll('.opt');
+        btns.forEach(function (b, oi) {
+          b.disabled = rec !== undefined;
+          if (rec !== undefined) {
+            if (oi === q.answer) b.classList.add('correct');
+            else if (oi === rec.picked) b.classList.add('wrong');
+          }
+        });
+        if (rec !== undefined) {
+          fb.className = 'feedback ' + (rec.correct ? 'ok' : 'no');
+          fb.innerHTML = (rec.correct ? '✅ صح! ' : '❌ مش دي. ') + renderInline(q.explain);
+        }
+      }
+      paint();
+    });
+    checkQuizDone(lesson);
+  }
+
+  function checkQuizDone(lesson) {
+    var total = lesson.quiz.length, answered = 0, correct = 0;
+    lesson.quiz.forEach(function (q, qi) {
+      var rec = progress.answers[lesson.id + ':' + qi];
+      if (rec !== undefined) { answered++; if (rec.correct) correct++; }
+    });
+    var result = document.getElementById('quiz-result');
+    if (answered === total && total > 0) {
+      if (correct === total && !progress.done[lesson.id]) {
+        progress.done[lesson.id] = true;
+        saveProgress();
+      }
+      result.classList.add('show');
+      result.innerHTML = '🏁 خلصت كويز الدرس: ' + correct + ' من ' + total + ' صح' +
+        (correct === total ? ' : أداء مثالي 👏' : ' : راجع اللي غلطت فيه فوق وافهم ليه');
+      if (correct===total) document.getElementById('complete-badge').classList.add('show');
+      else { const retry=document.createElement('button'); retry.className='solution-toggle';retry.textContent='حاول الكويز تاني';retry.onclick=()=>{lesson.quiz.forEach((q,i)=>delete progress.answers[lesson.id+':'+i]);saveProgress();openLesson(lesson.id);};result.appendChild(retry); }
+      refreshProgressUI();
+    }
+  }
+
+  /* ---------- exercises ---------- */
+  function buildExercises(lesson) {
+    var host = document.getElementById('exs');
+    lesson.exercises.forEach(function (ex, i) {
+      var box = document.createElement('div');
+      box.className = 'exercise';
+      var html = '<div class="task">تمرين ' + (i + 1) + ': ' + renderInline(ex.task) + '</div>';
+      if (ex.hint) html += '<p style="color:var(--muted);font-size:.88rem">💡 تلميح: ' + renderInline(ex.hint) + '</p>';
+      html += '<label>اكتب محاولتك قبل الحل:</label><textarea class="attempt" dir="ltr" rows="4" spellcheck="false" aria-label="محاولتك"></textarea><p class="small">المحاولة هنا للمذاكرة وبتتحفظ في متصفحك. لو التمرين بيقولك جرب في المعمل، افتح معمل ML من الشريط فوق.</p><button class="solution-toggle">أظهر الحل النموذجي</button>';
+      html += '<div class="solution">' + (ex.code ? highlight(ex.code) : '') +
+        (ex.why ? '<div class="why">' + renderInline(ex.why) + '</div>' : '') + '</div>';
+      box.innerHTML = html;
+      var btn = box.querySelector('.solution-toggle');
+      var sol = box.querySelector('.solution');
+      var attempt=box.querySelector('.attempt');var ak='attempt:'+lesson.id+':'+i;attempt.value=progress[ak]||'';attempt.oninput=()=>{progress[ak]=attempt.value;saveProgress();};
+      btn.addEventListener('click', function () {
+        sol.classList.toggle('open');
+        btn.textContent = sol.classList.contains('open') ? 'إخفي الحل' : 'أظهر الحل النموذجي';
+      });
+      host.appendChild(box);
+    });
+  }
+
+  /* ---------- reset + menu ---------- */
+  document.getElementById('reset-btn').addEventListener('click', function () {
+    if (confirm('متأكد إنك عايز تمسح كل تقدمك وتبدأ من الأول؟')) {
+      progress = { answers: {}, done: {} };
+      saveProgress();
+      buildNav();
+      refreshProgressUI();
+      if (currentLesson) openLesson(currentLesson.id);
+    }
+  });
+
+  document.getElementById('menu-toggle').addEventListener('click', function () {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  /* ---------- boot ---------- */
+  buildNav();
+  refreshProgressUI();
+})();
+
+</script>
+<script>
+/* ML From Zero — interactive lab: 3 client-side demos, all computed live */
+(function () {
+  'use strict';
+  var lab = document.getElementById('lab');
+
+  /* ============ helpers ============ */
+  function setupCanvas(cv) {
+    var dpr = window.devicePixelRatio || 1;
+    var w = cv.clientWidth, h = cv.clientHeight;
+    if (!w) { w = 600; h = 320; }
+    cv.width = w * dpr; cv.height = h * dpr;
+    var ctx = cv.getContext('2d');
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+  function fmt(n, d) { return (Math.round(n * Math.pow(10, d)) / Math.pow(10, d)).toString(); }
+
+  /* ============ Demo 1: draw-a-line regression ============ */
+  var PTS = [[1,52],[2,55],[3,61],[4,63],[5,70],[6,68],[7,74],[8,79],[9,83],[10,88]];
+  var BEST = { b: 3.8848, a: 47.9333 }; /* least squares on PTS */
+  var X0 = 0, X1 = 11, Y0 = 40, Y1 = 95;
+  var reg = { a: 60, b: 2, drag: -1, anim: null };
+  var rcv = document.getElementById('reg-canvas');
+
+  function regMap(cv, pt) { /* data -> px */
+    return [40 + (pt[0] - X0) / (X1 - X0) * (cv.w - 70), cv.h - 25 - (pt[1] - Y0) / (Y1 - Y0) * (cv.h - 50)];
+  }
+  function regUnmap(cv, px, py) {
+    return [X0 + (px - 40) / (cv.w - 70) * (X1 - X0), Y0 + (cv.h - 25 - py) / (cv.h - 50) * (Y1 - Y0)];
+  }
+  function regMSE(a, b) {
+    var s = 0;
+    PTS.forEach(function (p) { var e = a + b * p[0] - p[1]; s += e * e; });
+    return s / PTS.length;
+  }
+  function regHandles(cv) {
+    return [regMap(cv, [0.3, reg.a + reg.b * 0.3]), regMap(cv, [10.5, reg.a + reg.b * 10.5])];
+  }
+  function regDraw() {
+    if (!rcv) return;
+    var cv = setupCanvas(rcv), ctx = cv.ctx;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, cv.w, cv.h);
+    ctx.strokeStyle = 'rgba(255,255,255,.15)'; ctx.lineWidth = 1;
+    for (var gx = 1; gx <= 10; gx++) { var p = regMap(cv, [gx, Y0]); ctx.beginPath(); ctx.moveTo(p[0], 15); ctx.lineTo(p[0], cv.h - 25); ctx.stroke(); }
+    for (var gy = 50; gy <= 90; gy += 10) { var q = regMap(cv, [X0, gy]); ctx.beginPath(); ctx.moveTo(40, q[1]); ctx.lineTo(cv.w - 30, q[1]); ctx.stroke(); }
+    ctx.fillStyle = '#98a1b3'; ctx.font = '11px JetBrains Mono, monospace';
+    for (var lx = 1; lx <= 10; lx++) { var lp = regMap(cv, [lx, Y0]); ctx.fillText(lx, lp[0] - 3, cv.h - 8); }
+    for (var ly = 50; ly <= 90; ly += 10) { var lq = regMap(cv, [X0, ly]); ctx.fillText(ly, 8, lq[1] + 4); }
+    ctx.fillText('ساعات المذاكرة', cv.w - 105, cv.h - 8);
+    var h = regHandles(cv);
+    var mse = regMSE(reg.a, reg.b);
+    ctx.strokeStyle = mse < 5 ? '#3ddc84' : '#60a5fa'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(h[0][0], h[0][1]); ctx.lineTo(h[1][0], h[1][1]); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,107,107,.55)'; ctx.lineWidth = 1;
+    PTS.forEach(function (p) {
+      var pp = regMap(cv, p), py = regMap(cv, [p[0], reg.a + reg.b * p[0]]);
+      ctx.beginPath(); ctx.moveTo(pp[0], pp[1]); ctx.lineTo(py[0], py[1]); ctx.stroke();
+    });
+    PTS.forEach(function (p) {
+      var pp = regMap(cv, p);
+      ctx.fillStyle = '#7aa7ff'; ctx.beginPath(); ctx.arc(pp[0], pp[1], 5, 0, 7); ctx.fill();
+    });
+    h.forEach(function (hp) {
+      ctx.fillStyle = '#ffc048'; ctx.beginPath(); ctx.arc(hp[0], hp[1], 9, 0, 7); ctx.fill();
+      ctx.fillStyle = '#06070a'; ctx.beginPath(); ctx.arc(hp[0], hp[1], 4, 0, 7); ctx.fill();
+    });
+    var el = document.getElementById('reg-stats');
+    if (el) el.innerHTML = 'خطك: <code>score = ' + fmt(reg.a, 2) + ' + ' + fmt(reg.b, 2) + ' × hours</code> &nbsp;•&nbsp; MSE = <b>' + fmt(mse, 2) + '</b>' +
+      (mse <= 2.31 ? ' 🏆 ده أحسن خط ممكن رياضياً!' : mse < 10 ? ' (قريب! أحسن قيمة ممكنة 2.3)' : ' (أحسن قيمة ممكنة 2.3 — جرب تقرب أكتر)');
+  }
+  function regPos(e) {
+    var r = rcv.getBoundingClientRect();
+    var t = (e.touches && e.touches[0]) || e;
+    return [t.clientX - r.left, t.clientY - r.top];
+  }
+  if (rcv) {
+    var down = function (e) {
+      var p = regPos(e), cv = setupCanvas(rcv), h = regHandles(cv);
+      reg.drag = -1;
+      h.forEach(function (hp, i) { if (Math.hypot(hp[0] - p[0], hp[1] - p[1]) < 22) reg.drag = i; });
+      if (reg.drag >= 0) { if (reg.anim) { cancelAnimationFrame(reg.anim); reg.anim = null; } e.preventDefault(); }
+    };
+    var move = function (e) {
+      if (reg.drag < 0) return;
+      var p = regPos(e), cv = setupCanvas(rcv), d = regUnmap(cv, p[0], p[1]);
+      var hx = reg.drag === 0 ? 0.3 : 10.5;
+      var yAtHandle = Math.max(Y0, Math.min(Y1, d[1]));
+      var otherX = reg.drag === 0 ? 10.5 : 0.3;
+      var otherY = reg.a + reg.b * otherX;
+      reg.b = (otherY - yAtHandle) / (otherX - hx);
+      reg.a = yAtHandle - reg.b * hx;
+      regDraw(); e.preventDefault();
+    };
+    var up = function () { reg.drag = -1; };
+    rcv.addEventListener('mousedown', down); rcv.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    rcv.addEventListener('touchstart', down, { passive: false });
+    rcv.addEventListener('touchmove', move, { passive: false });
+    rcv.addEventListener('touchend', up);
+    var learnBtn = document.getElementById('reg-learn');
+    if (learnBtn) learnBtn.onclick = function () {
+      var sa = reg.a, sb = reg.b, t0 = null;
+      if (reg.anim) cancelAnimationFrame(reg.anim);
+      var step = function (ts) {
+        if (!t0) t0 = ts;
+        var k = Math.min(1, (ts - t0) / 900), e2 = 1 - Math.pow(1 - k, 3);
+        reg.a = sa + (BEST.a - sa) * e2; reg.b = sb + (BEST.b - sb) * e2;
+        regDraw();
+        if (k < 1) reg.anim = requestAnimationFrame(step); else reg.anim = null;
+      };
+      reg.anim = requestAnimationFrame(step);
+    };
+    var resetBtn = document.getElementById('reg-reset');
+    if (resetBtn) resetBtn.onclick = function () { reg.a = 60; reg.b = 2; regDraw(); };
+    regDraw();
+    window.addEventListener('resize', regDraw);
+  }
+
+  /* ============ Demo 2: K-Means on clicks ============ */
+  var kcv = document.getElementById('km-canvas');
+  var KM = { pts: [], centroids: [], assign: [], K: 3, running: false };
+  var KCOLORS = ['#60a5fa', '#3ddc84', '#ffc048', '#ff6b6b'];
+  function kmDraw() {
+    if (!kcv) return;
+    var cv = setupCanvas(kcv), ctx = cv.ctx;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, cv.w, cv.h);
+    KM.pts.forEach(function (p, i) {
+      var c = KM.assign[i] >= 0 ? KCOLORS[KM.assign[i] % 4] : '#7aa7ff';
+      ctx.fillStyle = c; ctx.beginPath(); ctx.arc(p[0], p[1], 7, 0, 7); ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,.4)'; ctx.lineWidth = 1; ctx.stroke();
+    });
+    KM.centroids.forEach(function (c, i) {
+      ctx.strokeStyle = KCOLORS[i % 4]; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(c[0] - 11, c[1]); ctx.lineTo(c[0] + 11, c[1]); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(c[0], c[1] - 11); ctx.lineTo(c[0], c[1] + 11); ctx.stroke();
+    });
+    var el = document.getElementById('km-stats');
+    if (el) el.textContent = 'نقاط: ' + KM.pts.length + (KM.centroids.length ? ' • المراكز موضحة بعلامة +' : '');
+  }
+  function kmStep() {
+    if (KM.pts.length < KM.K) return false;
+    if (!KM.centroids.length) {
+      KM.centroids = [];
+      var idx = {};
+      while (KM.centroids.length < KM.K) {
+        var i = Math.floor(Math.random() * KM.pts.length);
+        if (!idx[i]) { idx[i] = 1; KM.centroids.push([KM.pts[i][0], KM.pts[i][1]]); }
+      }
+    }
+    var moved = false;
+    KM.assign = KM.pts.map(function (p) {
+      var best = 0, bd = 1e18;
+      KM.centroids.forEach(function (c, i) {
+        var d = (p[0] - c[0]) * (p[0] - c[0]) + (p[1] - c[1]) * (p[1] - c[1]);
+        if (d < bd) { bd = d; best = i; }
+      });
+      return best;
+    });
+    KM.centroids = KM.centroids.map(function (c, i) {
+      var g = KM.pts.filter(function (_, j) { return KM.assign[j] === i; });
+      if (!g.length) return c;
+      var nx = g.reduce(function (s, p) { return s + p[0]; }, 0) / g.length;
+      var ny = g.reduce(function (s, p) { return s + p[1]; }, 0) / g.length;
+      if (Math.abs(nx - c[0]) > 0.5 || Math.abs(ny - c[1]) > 0.5) moved = true;
+      return [nx, ny];
+    });
+    kmDraw();
+    return moved;
+  }
+  if (kcv) {
+    var kpos = function (e) {
+      var r = kcv.getBoundingClientRect(), t = (e.touches && e.touches[0]) || e;
+      return [t.clientX - r.left, t.clientY - r.top];
+    };
+    kcv.addEventListener('mousedown', function (e) {
+      var p = kpos(e);
+      KM.pts.push(p); KM.assign.push(-1); KM.centroids = [];
+      kmDraw(); e.preventDefault();
+    });
+    var kSel = document.getElementById('km-k');
+    if (kSel) kSel.onchange = function () { KM.K = parseInt(kSel.value, 10) || 3; KM.centroids = []; KM.assign = KM.pts.map(function () { return -1; }); kmDraw(); };
+    var kStepBtn = document.getElementById('km-step');
+    if (kStepBtn) kStepBtn.onclick = function () { if (KM.pts.length >= KM.K) kmStep(); };
+    var kRunBtn = document.getElementById('km-run');
+    if (kRunBtn) kRunBtn.onclick = function () {
+      if (KM.running || KM.pts.length < KM.K) return;
+      KM.running = true;
+      var it = 0;
+      var loop = function () {
+        it++;
+        var moved = kmStep();
+        if (moved && it < 30 && KM.running) setTimeout(loop, 450);
+        else { KM.running = false; }
+      };
+      loop();
+    };
+    var kClrBtn = document.getElementById('km-clear');
+    if (kClrBtn) kClrBtn.onclick = function () { KM.pts = []; KM.assign = []; KM.centroids = []; KM.running = false; kmDraw(); };
+    kmDraw();
+    window.addEventListener('resize', kmDraw);
+  }
+
+  /* ============ Demo 3: decision threshold ============ */
+  var STAY = [52,58,60,64,66,70,72,75,78,80,82,85,88,90,93];
+  var CHURN = [8,12,18,22,28,32,38,42,48,55,60,64,70,74,78];
+  var tcv = document.getElementById('th-canvas');
+  var TH = { t: 65, drag: false };
+  function thCounts(t) {
+    var TP = 0, FP = 0, TN = 0, FN = 0; /* predict churn if score < t */
+    CHURN.forEach(function (s) { if (s < t) TP++; else FN++; });
+    STAY.forEach(function (s) { if (s < t) FP++; else TN++; });
+    return { TP: TP, FP: FP, TN: TN, FN: FN };
+  }
+  function thDraw() {
+    if (!tcv) return;
+    var cv = setupCanvas(tcv), ctx = cv.ctx;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, cv.w, cv.h);
+    var y1 = cv.h * 0.34, y2 = cv.h * 0.72;
+    var tx = TH.t / 100 * (cv.w - 40) + 20;
+    ctx.fillStyle = 'rgba(255,107,107,.10)'; ctx.fillRect(20, 10, tx - 20, cv.h - 20);
+    ctx.fillStyle = 'rgba(61,220,132,.08)'; ctx.fillRect(tx, 10, cv.w - 40 - (tx - 20), cv.h - 20);
+    ctx.strokeStyle = '#ffc048'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(tx, 10); ctx.lineTo(tx, cv.h - 10); ctx.stroke();
+    ctx.fillStyle = '#ffc048'; ctx.font = 'bold 12px Cairo, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('العتبة = ' + Math.round(TH.t), tx, cv.h - 2);
+    ctx.textAlign = 'left';
+    ctx.font = '11px JetBrains Mono, monospace';
+    CHURN.forEach(function (s) {
+      var x = s / 100 * (cv.w - 40) + 20;
+      ctx.fillStyle = s < TH.t ? '#ff6b6b' : '#ffabab';
+      ctx.beginPath(); ctx.arc(x, y1, 6, 0, 7); ctx.fill();
+    });
+    STAY.forEach(function (s) {
+      var x = s / 100 * (cv.w - 40) + 20;
+      ctx.fillStyle = s < TH.t ? '#9dc0ff' : '#3ddc84';
+      ctx.beginPath(); ctx.arc(x, y2, 6, 0, 7); ctx.fill();
+    });
+    ctx.fillStyle = '#98a1b3'; ctx.font = 'bold 12px Cairo, sans-serif';
+    ctx.fillText('شالوا', 20, y1 - 18); ctx.fillText('جددوا', 20, y2 - 18);
+    for (var g = 0; g <= 100; g += 20) {
+      var gx = g / 100 * (cv.w - 40) + 20;
+      ctx.fillStyle = 'rgba(255,255,255,.4)'; ctx.font = '10px JetBrains Mono, monospace';
+      ctx.fillText(g, gx - 6, cv.h - 16);
+    }
+    var c = thCounts(TH.t), n = STAY.length + CHURN.length;
+    var acc = (c.TP + c.TN) / n, prec = c.TP + c.FP ? c.TP / (c.TP + c.FP) : 0, rec = c.TP + c.FN ? c.TP / (c.TP + c.FN) : 0;
+    var el = document.getElementById('th-stats');
+    if (el) el.innerHTML = 'TP=' + c.TP + ' • FP=' + c.FP + ' • TN=' + c.TN + ' • FN=' + c.FN +
+      ' &nbsp;→&nbsp; Accuracy=<b>' + fmt(acc * 100, 1) + '%</b> • Precision=<b>' + fmt(prec * 100, 1) + '%</b> • Recall=<b>' + fmt(rec * 100, 1) + '%</b>';
+  }
+  if (tcv) {
+    var tpos = function (e) {
+      var r = tcv.getBoundingClientRect(), t = (e.touches && e.touches[0]) || e;
+      return t.clientX - r.left;
+    };
+    var tdown = function (e) { TH.drag = true; tmove(e); e.preventDefault(); };
+    var tmove = function (e) {
+      if (!TH.drag) return;
+      var cv = setupCanvas(tcv), x = tpos(e);
+      TH.t = Math.max(0, Math.min(100, (x - 20) / (cv.w - 40) * 100));
+      thDraw(); e.preventDefault();
+    };
+    var tup = function () { TH.drag = false; };
+    tcv.addEventListener('mousedown', tdown); tcv.addEventListener('mousemove', tmove);
+    window.addEventListener('mouseup', tup);
+    tcv.addEventListener('touchstart', tdown, { passive: false });
+    tcv.addEventListener('touchmove', tmove, { passive: false });
+    tcv.addEventListener('touchend', tup);
+    thDraw();
+    window.addEventListener('resize', thDraw);
+  }
+
+  /* ---------- top nav wiring (same as siblings) ---------- */
+  document.getElementById('lab-link').onclick = function () {
+    document.getElementById('hero').style.display = 'none';
+    document.getElementById('lesson').style.display = 'none';
+    lab.hidden = false;
+    window.scrollTo(0, 0);
+    regDraw(); kmDraw(); thDraw();
+  };
+  document.getElementById('home-link').onclick = function () {
+    lab.hidden = true;
+    document.getElementById('lesson').style.display = 'none';
+    document.getElementById('hero').style.display = 'block';
+  };
+  document.getElementById('start-btn').onclick = function () { document.querySelector('.nav-item').click(); };
+})();
+
+</script>
+</body>
+</html>
